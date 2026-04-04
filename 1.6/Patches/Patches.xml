@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+
+    <!-- Add AnimalRegistry comp to surface settlements -->
+    <Operation Class="PatchOperationAdd">
+        <xpath>/Defs/FactionColonies.WorldSettlementDef[defName="WorldSettlementDef_Surface"]/comps</xpath>
+        <value>
+            <li Class="FactionColonies.AnimalHusbandry.WorldObjectCompProperties_AnimalRegistry" />
+        </value>
+    </Operation>
+
+    <!-- Replace the base animal filter extension with our filtered subclass -->
+    <Operation Class="PatchOperationReplace">
+        <xpath>/Defs/FactionColonies.ResourceTypeDef[defName="RTD_Animals"]/modExtensions/li[@Class="FactionColonies.ResourceFilterExtension_Animals"]</xpath>
+        <value>
+            <li Class="FactionColonies.AnimalHusbandry.ResourceFilterExtension_AnimalHusbandry" />
+        </value>
+    </Operation>
+
+</Patch>

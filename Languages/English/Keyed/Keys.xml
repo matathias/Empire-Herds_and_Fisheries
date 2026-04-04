@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+    <!-- Gizmo / Float menu -->
+    <AH_RegisterAnimals>Register Animals</AH_RegisterAnimals>
+    <AH_RegisterAnimalsDesc>Register breeding pairs from this caravan at {0}.</AH_RegisterAnimalsDesc>
+    <AH_RegisterAnimalsAt>Register animals at {0}</AH_RegisterAnimalsAt>
+
+    <!-- Dialog -->
+    <AH_RegisterTitle>Register Animals at {0}</AH_RegisterTitle>
+    <AH_RegisterDesc>Select species to register. Two animals will be consumed per species as a breeding pair.</AH_RegisterDesc>
+    <AH_Confirm>Confirm</AH_Confirm>
+    <AH_Cancel>Cancel</AH_Cancel>
+
+    <!-- Livestock tab -->
+    <AH_LivestockTab>Livestock</AH_LivestockTab>
+    <AH_SourceRegistered>Registered</AH_SourceRegistered>
+    <AH_SourceCloned>Cloned</AH_SourceCloned>
+    <AH_SourceBasic>Basic</AH_SourceBasic>
+    <AH_NoAnimals>No animals registered at this settlement.</AH_NoAnimals>
+    <AH_ProductsTooltip>{0} produces: {1}</AH_ProductsTooltip>
+
+    <!-- Production modifier -->
+    <AH_NoAnimalsRegistered>No animals registered — animal production disabled</AH_NoAnimalsRegistered>
+
+    <!-- Settings -->
+    <AH_Title>Empire: Pens &amp; Pastures</AH_Title>
+    <AH_PatchTitle>Patch Notes: Pens &amp; Pastures</AH_PatchTitle>
+    <AH_OpenPatchNotes>Open Patch Notes</AH_OpenPatchNotes>
+    <AH_BasicAnimalsEnabled>Basic farm animals available at all settlements</AH_BasicAnimalsEnabled>
+    <AH_BasicAnimalsEnabledDesc>When enabled, basic farm animals (Chicken, Cow, Pig, Sheep, Goat) are available at all settlements without needing to send breeding pairs.</AH_BasicAnimalsEnabledDesc>
+    <AH_BasicAnimalsList>Basic animals:</AH_BasicAnimalsList>
+</LanguageData>
