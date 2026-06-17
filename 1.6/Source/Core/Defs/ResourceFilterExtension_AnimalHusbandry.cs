@@ -15,7 +15,7 @@ namespace FactionColonies.AnimalHusbandry
     {
         public override void SetFilter(ThingFilter filter, TechLevel techlevel, ResourceFC resource = null)
         {
-            if (resource == null || resource.settlement == null)
+            if (resource is null || resource.settlement is null)
             {
                 base.SetFilter(filter, techlevel, resource);
                 return;
@@ -25,7 +25,7 @@ namespace FactionColonies.AnimalHusbandry
                 resource.settlement.GetComponent<WorldObjectComp_AnimalRegistry>();
             HashSet<ThingDef> allowed = comp?.GetAllowedAnimals();
 
-            if (allowed == null || allowed.Count == 0)
+            if (allowed is null || allowed.Count == 0)
             {
                 // No animals — don't add races, and remove category-allowed products
                 RemoveNonAllowedProducts(filter, new HashSet<ThingDef>());
@@ -48,7 +48,7 @@ namespace FactionColonies.AnimalHusbandry
             List<ThingDef> snapshot = filter.AllowedThingDefs.ToList();
             foreach (ThingDef def in snapshot)
             {
-                if (def.race != null) continue;
+                if (def.race is object) continue;
                 if (!AnimalProductMap.IsProductAllowed(def, allowed))
                     filter.SetAllow(def, false);
             }
@@ -59,7 +59,7 @@ namespace FactionColonies.AnimalHusbandry
             tlevel = TechLevel.Undefined;
 
             HashSet<ThingDef> allowed = null;
-            if (resource != null && resource.settlement != null)
+            if (resource is object && resource.settlement is object)
             {
                 WorldObjectComp_AnimalRegistry comp =
                     resource.settlement.GetComponent<WorldObjectComp_AnimalRegistry>();
@@ -73,12 +73,12 @@ namespace FactionColonies.AnimalHusbandry
             QualityCategory quality = QualityCategory.Normal, ThingDef stuffDef = null,
             ResourceFC resource = null)
         {
-            if (thingDef.race != null && resource != null && resource.settlement != null)
+            if (thingDef.race is object && resource is object && resource.settlement is object)
             {
                 WorldObjectComp_AnimalRegistry comp =
                     resource.settlement.GetComponent<WorldObjectComp_AnimalRegistry>();
                 HashSet<ThingDef> allowed = comp?.GetAllowedAnimals();
-                if (allowed != null && !allowed.Contains(thingDef))
+                if (allowed is object && !allowed.Contains(thingDef))
                     return new List<Thing>();
             }
 

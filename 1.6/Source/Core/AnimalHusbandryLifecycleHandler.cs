@@ -7,7 +7,7 @@ namespace FactionColonies.AnimalHusbandry
     /// Lifecycle handler that invalidates the CloningCache when a Cloning Lab
     /// is built or demolished at any settlement.
     /// </summary>
-    public class AnimalHusbandryLifecycleHandler : LifecycleParticipantBase
+    public class AnimalHusbandryLifecycleHandler : ISettlementListener
     {
         private static BuildingFCDef cachedCloningLabDef;
 
@@ -15,27 +15,32 @@ namespace FactionColonies.AnimalHusbandry
         {
             get
             {
-                if (cachedCloningLabDef == null)
+                if (cachedCloningLabDef is null)
                     cachedCloningLabDef = DefDatabase<BuildingFCDef>.GetNamedSilentFail("CloningLab");
                 return cachedCloningLabDef;
             }
         }
 
-        public override void OnBuildingConstructed(WorldSettlementFC settlement, BuildingFCDef building, int slot)
+        public void OnSettlementCreated(WorldSettlementFC settlement) { }
+        public void OnSettlementRemoved(WorldSettlementFC settlement) { }
+        public void OnSettlementUpgraded(WorldSettlementFC settlement, int oldLevel, int newLevel) { }
+        public void OnSettlementTypeChanged(WorldSettlementFC settlement, WorldSettlementDef oldDef, WorldSettlementDef newDef) { }
+
+        public void OnBuildingConstructed(WorldSettlementFC settlement, BuildingFCDef building, int slot)
         {
             if (building == CloningLabDef)
             {
                 CloningCache.Invalidate();
-                FactionCache.FactionComp?.InvalidateAllSettlementStatCaches();
+                FindFC.FactionComp?.InvalidateAllSettlementStatCaches();
             }
         }
 
-        public override void OnBuildingDeconstructed(WorldSettlementFC settlement, BuildingFCDef building, int slot)
+        public void OnBuildingDeconstructed(WorldSettlementFC settlement, BuildingFCDef building, int slot)
         {
             if (building == CloningLabDef)
             {
                 CloningCache.Invalidate();
-                FactionCache.FactionComp?.InvalidateAllSettlementStatCaches();
+                FindFC.FactionComp?.InvalidateAllSettlementStatCaches();
             }
         }
     }

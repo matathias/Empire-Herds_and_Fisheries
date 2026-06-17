@@ -49,9 +49,7 @@ namespace FactionColonies.AnimalHusbandry
             float listHeight = inRect.height - y - 50f;
             Rect listRect = new Rect(inRect.x, y, inRect.width, listHeight);
             float viewHeight = registrableSpecies.Count * 36f;
-            Rect viewRect = new Rect(0, 0, listRect.width - 16f, viewHeight);
-
-            Widgets.BeginScrollView(listRect, ref scrollPosition, viewRect);
+            Rect viewRect = ScrollUtil.BeginScrollView(listRect, ref scrollPosition, viewHeight);
 
             float rowY = 0;
             foreach (ThingDef species in registrableSpecies)
@@ -59,7 +57,7 @@ namespace FactionColonies.AnimalHusbandry
                 Rect row = new Rect(0, rowY, viewRect.width, 34f);
 
                 int count = caravan.PawnsListForReading
-                    .Count(p => p.RaceProps != null && p.RaceProps.Animal && p.def == species);
+                    .Count(p => p.RaceProps is object && p.RaceProps.Animal && p.def == species);
 
                 bool selected = selections[species];
                 Rect checkRect = new Rect(row.x + 4, row.y + 4, 24, 24);
@@ -83,7 +81,7 @@ namespace FactionColonies.AnimalHusbandry
                 rowY += 36f;
             }
 
-            Widgets.EndScrollView();
+            ScrollUtil.EndScrollView();
 
             float buttonY = inRect.yMax - 40f;
             float buttonWidth = 120f;
@@ -119,7 +117,7 @@ namespace FactionColonies.AnimalHusbandry
                 ThingDef species = kvp.Key;
 
                 List<Pawn> animals = caravan.PawnsListForReading
-                    .Where(p => p.RaceProps != null && p.RaceProps.Animal && p.def == species)
+                    .Where(p => p.RaceProps is object && p.RaceProps.Animal && p.def == species)
                     .ToList();
 
                 // Prefer 1 male + 1 female
@@ -127,7 +125,7 @@ namespace FactionColonies.AnimalHusbandry
                 Pawn female = animals.FirstOrDefault(p => p.gender == Gender.Female);
 
                 List<Pawn> toRemove = new List<Pawn>();
-                if (male != null && female != null)
+                if (male is object && female is object)
                 {
                     toRemove.Add(male);
                     toRemove.Add(female);

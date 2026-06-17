@@ -24,7 +24,7 @@ namespace FactionColonies.AnimalHusbandry
         {
             get
             {
-                if (resolvedBasicAnimals == null)
+                if (resolvedBasicAnimals is null)
                     ResolveBasicAnimals();
                 return resolvedBasicAnimals;
             }
@@ -36,7 +36,7 @@ namespace FactionColonies.AnimalHusbandry
             foreach (string defName in BasicAnimalDefNames)
             {
                 ThingDef def = DefDatabase<ThingDef>.GetNamedSilentFail(defName);
-                if (def != null)
+                if (def is object)
                     resolvedBasicAnimals.Add(def);
                 else
                     LogAH.Warning($"Basic animal def '{defName}' not found");
@@ -49,7 +49,7 @@ namespace FactionColonies.AnimalHusbandry
             Scribe_Values.Look(ref printDebug, "printDebug", false);
             Scribe_Values.Look(ref BasicAnimalsEnabled, "basicAnimalsEnabled", true);
             Scribe_Collections.Look(ref BasicAnimalDefNames, "basicAnimalDefNames", LookMode.Value);
-            if (BasicAnimalDefNames == null)
+            if (BasicAnimalDefNames is null)
                 BasicAnimalDefNames = new List<string> { "Chicken", "Cow", "Pig", "Sheep", "Goat" };
             resolvedBasicAnimals = null;
         }
@@ -69,7 +69,7 @@ namespace FactionColonies.AnimalHusbandry
                 "AH_BasicAnimalsEnabledDesc".Translate());
 
             if (prevBasic != BasicAnimalsEnabled)
-                FactionCache.FactionComp?.InvalidateAllSettlementStatCaches();
+                FindFC.FactionComp?.InvalidateAllSettlementStatCaches();
 
             if (BasicAnimalsEnabled)
             {
@@ -88,7 +88,7 @@ namespace FactionColonies.AnimalHusbandry
                 {
                     BasicAnimalDefNames.Remove(name);
                     ResolveBasicAnimals();
-                    FactionCache.FactionComp?.InvalidateAllSettlementStatCaches();
+                    FindFC.FactionComp?.InvalidateAllSettlementStatCaches();
                 }
             }
 
@@ -108,13 +108,13 @@ namespace FactionColonies.AnimalHusbandry
         static AnimalHusbandryStartup()
         {
             new Harmony("Matathias.Empire.AnimalHusbandry").PatchAll(Assembly.GetExecutingAssembly());
-            LifecycleRegistry.Register(_lifecycleHandler);
+            EmpireRegistry.Register(_lifecycleHandler);
             EmpireCacheUtil.RegisterCacheInvalidator("AnimalHusbandry", () =>
             {
                 AnimalProductMap.Clear();
                 CloningCache.Clear();
                 // Re-register after InvalidateAll clears all registries
-                LifecycleRegistry.Register(_lifecycleHandler);
+                EmpireRegistry.Register(_lifecycleHandler);
             });
             AnimalProductMap.EnsureBuilt();
             FCAHSettings.ResolveBasicAnimals();

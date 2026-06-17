@@ -36,26 +36,26 @@ namespace FactionColonies.AnimalHusbandry
             foreach (PawnKindDef kind in FactionCache.AllAnimalKindDefs)
             {
                 ThingDef race = kind.race;
-                if (race == null) continue;
+                if (race is null) continue;
                 if (!animalToProducts.ContainsKey(race))
                     animalToProducts[race] = new HashSet<ThingDef>();
                 HashSet<ThingDef> products = animalToProducts[race];
 
-                if (race.race?.meatDef != null)
+                if (race.race?.meatDef is object)
                     AddMapping(race, race.race.meatDef, products);
-                if (race.race?.leatherDef != null)
+                if (race.race?.leatherDef is object)
                     AddMapping(race, race.race.leatherDef, products);
 
                 CompProperties_Shearable shearable = race.GetCompProperties<CompProperties_Shearable>();
-                if (shearable?.woolDef != null)
+                if (shearable?.woolDef is object)
                     AddMapping(race, shearable.woolDef, products);
 
                 CompProperties_Milkable milkable = race.GetCompProperties<CompProperties_Milkable>();
-                if (milkable?.milkDef != null)
+                if (milkable?.milkDef is object)
                     AddMapping(race, milkable.milkDef, products);
 
                 CompProperties_EggLayer eggLayer = race.GetCompProperties<CompProperties_EggLayer>();
-                if (eggLayer?.eggUnfertilizedDef != null)
+                if (eggLayer?.eggUnfertilizedDef is object)
                     AddMapping(race, eggLayer.eggUnfertilizedDef, products);
             }
 

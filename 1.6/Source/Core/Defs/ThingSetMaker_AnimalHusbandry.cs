@@ -29,15 +29,15 @@ namespace FactionColonies.AnimalHusbandry
             foreach (PawnKindDef def in FactionCache.AllAnimalKindDefs)
             {
                 if (!parms.filter.Allows(def.race)) continue;
-                if (allowedAnimals != null && !allowedAnimals.Contains(def.race)) continue;
+                if (allowedAnimals is object && !allowedAnimals.Contains(def.race)) continue;
                 animalDefs.Add(def);
             }
 
             List<ThingDef> productDefs = new List<ThingDef>();
             foreach (ThingDef def in parms.filter.AllowedThingDefs)
             {
-                if (def.race != null) continue;
-                if (allowedAnimals != null && !AnimalProductMap.IsProductAllowed(def, allowedAnimals))
+                if (def.race is object) continue;
+                if (allowedAnimals is object && !AnimalProductMap.IsProductAllowed(def, allowedAnimals))
                     continue;
                 productDefs.Add(def);
             }
@@ -77,7 +77,7 @@ namespace FactionColonies.AnimalHusbandry
                     int attempts = 0;
                     do
                     {
-                        if (pawn != null) { pawn.Destroy(); pawn = null; }
+                        if (pawn is object) { pawn.Destroy(); pawn = null; }
                         PawnGenerationRequest request = new PawnGenerationRequest(
                             kind: animalDefs.RandomElement(),
                             faction: Find.FactionManager.OfPlayer,
@@ -90,7 +90,7 @@ namespace FactionColonies.AnimalHusbandry
 
                     if (attempts >= MAX_ATTEMPTS_FEW)
                     {
-                        if (pawn != null) pawn.Destroy();
+                        if (pawn is object) pawn.Destroy();
                     }
                     else
                     {
@@ -124,15 +124,15 @@ namespace FactionColonies.AnimalHusbandry
             List<ThingDef> list = new List<ThingDef>();
             foreach (PawnKindDef def in FactionCache.AllAnimalKindDefs)
             {
-                if (allowedAnimals == null || allowedAnimals.Contains(def.race))
+                if (allowedAnimals is null || allowedAnimals.Contains(def.race))
                     list.Add(def.race);
             }
-            if (parms.filter != null)
+            if (parms.filter is object)
             {
                 foreach (ThingDef def in parms.filter.AllowedThingDefs)
                 {
-                    if (def.race == null &&
-                        (allowedAnimals == null || AnimalProductMap.IsProductAllowed(def, allowedAnimals)))
+                    if (def.race is null &&
+                        (allowedAnimals is null || AnimalProductMap.IsProductAllowed(def, allowedAnimals)))
                         list.Add(def);
                 }
             }

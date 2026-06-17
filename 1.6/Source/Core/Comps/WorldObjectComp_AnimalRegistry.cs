@@ -9,7 +9,7 @@ using Verse;
 namespace FactionColonies.AnimalHusbandry
 {
     public class WorldObjectComp_AnimalRegistry : WorldObjectComp,
-        IResourceProductionModifier, ISettlementWindowOverview
+        IResourceProductionModifier, ISettlementWindowOverview, ISettlementPostLoadInit
     {
         private HashSet<ThingDef> registeredAnimals = new HashSet<ThingDef>();
 
@@ -20,7 +20,7 @@ namespace FactionColonies.AnimalHusbandry
         {
             get
             {
-                if (_settlement == null)
+                if (_settlement is null)
                     _settlement = parent as WorldSettlementFC;
                 return _settlement;
             }
@@ -100,14 +100,18 @@ namespace FactionColonies.AnimalHusbandry
         public override void PostExposeData()
         {
             base.PostExposeData();
-            List<ThingDef> animalList = registeredAnimals.ToList();
-            Scribe_Collections.Look(ref animalList, "registeredAnimals", LookMode.Def);
-            if (Scribe.mode == LoadSaveMode.PostLoadInit)
-            {
-                registeredAnimals = animalList != null
-                    ? new HashSet<ThingDef>(animalList)
-                    : new HashSet<ThingDef>();
-            }
+            Scribe_Collections.Look(ref registeredAnimals, "registeredAnimals", LookMode.Def);
+            if (registeredAnimals is null)
+                registeredAnimals = new HashSet<ThingDef>();
+        }
+
+        // ── ISettlementPostLoadInit ──
+
+        public void PostSettlementLoadInit(WorldSettlementFC settlement)
+        {
+            int removed = registeredAnimals.RemoveWhere(def => def is null || def.race is null || !def.race.Animal);
+            if (removed > 0)
+                LogAH.Warning($"Removed {removed} invalid animal registration(s) from {settlement.Name}");
         }
 
         // ── Caravan Gizmos & Float Menu ──
@@ -119,7 +123,7 @@ namespace FactionColonies.AnimalHusbandry
 
             foreach (Pawn pawn in caravan.PawnsListForReading)
             {
-                if (pawn.RaceProps == null || !pawn.RaceProps.Animal) continue;
+                if (pawn.RaceProps is null || !pawn.RaceProps.Animal) continue;
                 ThingDef race = pawn.def;
                 if (allowed.Contains(race)) continue;
 
@@ -194,9 +198,7 @@ namespace FactionColonies.AnimalHusbandry
 
             float rowHeight = 32f;
             float viewHeight = sorted.Count * rowHeight;
-            Rect viewRect = new Rect(0, 0, boundingBox.width - 16f, viewHeight);
-
-            Widgets.BeginScrollView(boundingBox, ref scrollPosition, viewRect);
+            Rect viewRect = ScrollUtil.BeginScrollView(boundingBox, ref scrollPosition, viewHeight);
 
             float y = 0;
             foreach (ThingDef race in sorted)
@@ -223,7 +225,7 @@ namespace FactionColonies.AnimalHusbandry
                 Text.Anchor = TextAnchor.UpperLeft;
 
                 HashSet<ThingDef> products = AnimalProductMap.GetProducts(race);
-                if (products != null && products.Count > 0)
+                if (products is object && products.Count > 0)
                 {
                     string tip = string.Join(", ", products.Select(p => p.LabelCap.ToString()));
                     TooltipHandler.TipRegion(row, "AH_ProductsTooltip".Translate(race.LabelCap, tip));
@@ -241,7 +243,7 @@ namespace FactionColonies.AnimalHusbandry
                     "AH_NoAnimals".Translate());
             }
 
-            Widgets.EndScrollView();
+            ScrollUtil.EndScrollView();
         }
 
         public void PostCloseWindow()

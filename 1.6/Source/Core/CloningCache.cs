@@ -28,24 +28,24 @@ namespace FactionColonies.AnimalHusbandry
 
         public static HashSet<ThingDef> GetClonedAnimals()
         {
-            if (!dirty && cachedClonedAnimals != null)
+            if (!dirty && cachedClonedAnimals is object)
                 return cachedClonedAnimals;
 
             cachedClonedAnimals = new HashSet<ThingDef>();
-            FactionFC faction = FactionCache.FactionComp;
-            if (faction == null) return cachedClonedAnimals;
+            FactionFC faction = FindFC.FactionComp;
+            if (faction is null) return cachedClonedAnimals;
 
             BuildingFCDef cloningLabDef = DefDatabase<BuildingFCDef>.GetNamedSilentFail("CloningLab");
-            if (cloningLabDef == null) return cachedClonedAnimals;
+            if (cloningLabDef is null) return cachedClonedAnimals;
 
             foreach (WorldSettlementFC settlement in faction.settlements)
             {
-                if (settlement.BuildingsComp == null) continue;
+                if (settlement.BuildingsComp is null) continue;
                 if (!settlement.BuildingsComp.HasBuilding(cloningLabDef)) continue;
 
                 WorldObjectComp_AnimalRegistry comp =
                     settlement.GetComponent<WorldObjectComp_AnimalRegistry>();
-                if (comp == null) continue;
+                if (comp is null) continue;
 
                 cachedClonedAnimals.UnionWith(comp.RegisteredAnimals);
             }
