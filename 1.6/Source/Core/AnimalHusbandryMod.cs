@@ -59,7 +59,7 @@ namespace FactionColonies.AnimalHusbandry
             Listing_Standard ls = new Listing_Standard();
             ls.Begin(inRect);
 
-            ls.CheckboxLabeled("Enable debug logging", ref printDebug);
+            ls.CheckboxLabeled("AH_DebugLogging".Translate(), ref printDebug);
             ls.GapLine();
 
             bool prevBasic = BasicAnimalsEnabled;

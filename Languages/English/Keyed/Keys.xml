@@ -29,4 +29,5 @@
     <AH_BasicAnimalsEnabled>Basic farm animals available at all settlements</AH_BasicAnimalsEnabled>
     <AH_BasicAnimalsEnabledDesc>When enabled, basic farm animals (Chicken, Cow, Pig, Sheep, Goat) are available at all settlements without needing to send breeding pairs.</AH_BasicAnimalsEnabledDesc>
     <AH_BasicAnimalsList>Basic animals:</AH_BasicAnimalsList>
+    <AH_DebugLogging>Enable debug logging</AH_DebugLogging>
 </LanguageData>
