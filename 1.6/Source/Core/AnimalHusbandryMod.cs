@@ -44,6 +44,15 @@ namespace FactionColonies.AnimalHusbandry
             }
         }
 
+        public static void ResetToDefaults()
+        {
+            printDebug = false;
+            BasicAnimalsEnabled = true;
+            savedBasicAnimalDefNames = null;   // "never saved" => InitializeBasicAnimals re-adds the defaults
+            InitializeBasicAnimals();
+            FindFC.FactionComp?.InvalidateAllSettlementStatCaches();
+        }
+
         public override void ExposeData()
         {
             base.ExposeData();
@@ -96,11 +105,19 @@ namespace FactionColonies.AnimalHusbandry
                     BasicAnimals.Remove(animal);
                     FindFC.FactionComp?.InvalidateAllSettlementStatCaches();
                 }
+
+                ls.Gap(4f);
+                if (ls.ButtonText("AH_AddBasicAnimal".Translate()))
+                    Find.WindowStack.Add(new Dialog_PickBasicAnimal());
             }
 
             ls.Gap(12f);
             if (ls.ButtonText("AH_OpenPatchNotes".Translate()))
                 Find.WindowStack.Add(new PatchNotesDisplayWindow("matathias.empire.animalhusbandry", "AH_PatchTitle".Translate()));
+
+            ls.Gap(12f);
+            if (ls.ButtonText("AH_ResetSettings".Translate()))
+                ResetToDefaults();
 
             ls.End();
         }

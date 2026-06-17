@@ -21,6 +21,8 @@
 		</li>
 	</modDependencies>
 
-	<description>Adds a breeding-pair requirement for animal production. Send animals to settlements via caravan to unlock their products. Basic farm animals are available by default (configurable). The Cloning Lab building shares stocked species empire-wide.</description>
+	<modIconPath IgnoreIfNoMatchingField="True">UI/Icons/EmpireLogo</modIconPath>
+
+	<description>A submod for Empire Refactored that adds a breeding-pair requirement for animal production. Send animals to settlements via caravan to unlock their products. Basic farm animals are available by default (configurable). The Cloning Lab building shares stocked species empire-wide.</description>
 
 </ModMetaData>

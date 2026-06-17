@@ -13,6 +13,7 @@
 
     <!-- Livestock tab -->
     <AH_LivestockTab>Livestock</AH_LivestockTab>
+    <AH_StockedHeader>Available Livestock</AH_StockedHeader>
     <AH_SourceRegistered>Stocked</AH_SourceRegistered>
     <AH_SourceCloned>Cloned</AH_SourceCloned>
     <AH_SourceBasic>Basic</AH_SourceBasic>
@@ -29,5 +30,12 @@
     <AH_BasicAnimalsEnabled>Basic farm animals available at all settlements</AH_BasicAnimalsEnabled>
     <AH_BasicAnimalsEnabledDesc>When enabled, basic farm animals (Chicken, Cow, Pig, Sheep, Goat) are available at all settlements without needing to send breeding pairs.</AH_BasicAnimalsEnabledDesc>
     <AH_BasicAnimalsList>Basic animals:</AH_BasicAnimalsList>
+    <AH_AddBasicAnimal>Add animal...</AH_AddBasicAnimal>
+    <AH_ResetSettings>Reset to default</AH_ResetSettings>
     <AH_DebugLogging>Enable debug logging</AH_DebugLogging>
+
+    <!-- Add-animal picker -->
+    <AH_PickBasicAnimalTitle>Add a basic animal</AH_PickBasicAnimalTitle>
+    <AH_PickBasicAnimalSearch>Search...</AH_PickBasicAnimalSearch>
+    <AH_PickBasicAnimalNone>No matching animals.</AH_PickBasicAnimalNone>
 </LanguageData>

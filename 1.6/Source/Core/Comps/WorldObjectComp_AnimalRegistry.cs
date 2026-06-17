@@ -233,9 +233,18 @@ namespace FactionColonies.AnimalHusbandry
 
             List<ThingDef> sorted = allowed.OrderBy(d => d.label).ToList();
 
+            float headerHeight = 30f;
+            Rect headerRect = new Rect(boundingBox.x, boundingBox.y, boundingBox.width, headerHeight);
+            Text.Font = GameFont.Medium;
+            Text.Anchor = TextAnchor.UpperLeft;
+            Widgets.Label(headerRect, "AH_StockedHeader".Translate());
+            Text.Font = GameFont.Small;
+            Rect listBox = new Rect(boundingBox.x, boundingBox.y + headerHeight,
+                boundingBox.width, boundingBox.height - headerHeight);
+
             float rowHeight = 32f;
             float viewHeight = sorted.Count * rowHeight;
-            Rect viewRect = ScrollUtil.BeginScrollView(boundingBox, ref scrollPosition, viewHeight);
+            Rect viewRect = ScrollUtil.BeginScrollView(listBox, ref scrollPosition, viewHeight);
 
             float y = 0;
             foreach (ThingDef race in sorted)
@@ -246,6 +255,7 @@ namespace FactionColonies.AnimalHusbandry
                 Widgets.ThingIcon(iconRect, race);
 
                 Rect labelRect = new Rect(iconRect.xMax + 8, row.y, row.width - 150, rowHeight);
+                Text.Anchor = TextAnchor.MiddleLeft;
                 Widgets.Label(labelRect, race.LabelCap);
 
                 string source;
@@ -276,7 +286,7 @@ namespace FactionColonies.AnimalHusbandry
 
             if (sorted.Count == 0)
             {
-                Widgets.Label(new Rect(8, 0, boundingBox.width - 16, 30),
+                Widgets.Label(new Rect(8, 0, viewRect.width - 16, 30),
                     "AH_NoAnimals".Translate());
             }
 
