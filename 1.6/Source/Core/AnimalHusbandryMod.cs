@@ -103,18 +103,13 @@ namespace FactionColonies.AnimalHusbandry
     [StaticConstructorOnStartup]
     public static class AnimalHusbandryStartup
     {
-        private static readonly AnimalHusbandryLifecycleHandler _lifecycleHandler = new AnimalHusbandryLifecycleHandler();
-
         static AnimalHusbandryStartup()
         {
             new Harmony("Matathias.Empire.AnimalHusbandry").PatchAll(Assembly.GetExecutingAssembly());
-            EmpireRegistry.Register(_lifecycleHandler);
             EmpireCacheUtil.RegisterCacheInvalidator("AnimalHusbandry", () =>
             {
                 AnimalProductMap.Clear();
                 CloningCache.Clear();
-                // Re-register after InvalidateAll clears all registries
-                EmpireRegistry.Register(_lifecycleHandler);
             });
             AnimalProductMap.EnsureBuilt();
             FCAHSettings.ResolveBasicAnimals();

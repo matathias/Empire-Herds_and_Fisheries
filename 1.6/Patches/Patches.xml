@@ -21,4 +21,18 @@
         <value>FactionColonies.AnimalHusbandry.ResourceFilterExtension_AnimalHusbandry</value>
     </Operation>
 
+    <!-- Attach the Cloning Lab building comp. Its OnConstruct/OnDeconstruct invalidate the empire-wide
+         CloningCache (replacing AnimalHusbandryLifecycleHandler). The base CloningLab def has no
+         modExtensions, so add the whole element; the base BuildingFCExtension type carries compClass. -->
+    <Operation Class="PatchOperationAdd">
+        <xpath>/Defs/FactionColonies.BuildingFCDef[defName="CloningLab"]</xpath>
+        <value>
+            <modExtensions>
+                <li Class="FactionColonies.BuildingFCExtension">
+                    <compClass>FactionColonies.AnimalHusbandry.SettlementBuildingComp_CloningLab</compClass>
+                </li>
+            </modExtensions>
+        </value>
+    </Operation>
+
 </Patch>
