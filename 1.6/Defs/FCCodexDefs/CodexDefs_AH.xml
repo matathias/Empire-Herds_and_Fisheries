@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    Pens & Pastures - Codex Entry Definitions
+
+    One CodexEntryDef per documented mechanic. Descriptions are deliberately
+    qualitative: they describe how the system behaves, not specific balance
+    constants (which animals are "basic", costs, etc.), which are configured in
+    mod settings and would drift out of date here.
+
+    seeAlso entries may reference base-mod Codex entries (Codex_ResourceProduction,
+    Codex_FirstSettlement, Codex_BuildingSlots) - the base mod loads first, so
+    those defNames resolve. bannerPath on the category supplies the right-pane
+    banner; entries are icon-less (a missing iconPath renders fine).
+-->
+<Defs>
+
+    <FactionColonies.CodexEntryDef>
+        <defName>Codex_AH_Overview</defName>
+        <label>Raising Livestock</label>
+        <description>With [b]Empire Refactored: Pens &amp; Pastures[/b], your settlements no longer conjure animals and animal goods out of nothing. The animals resource is now tied to the species a settlement can actually raise — if it can raise none, it produces no animal goods at all, no matter how many workers you assign.
+
+A settlement can draw on three sources of livestock:
+
+[b] - Stocked breeding pairs[/b] — species you have personally delivered to that settlement and bred. These are local to the settlement that raised them.
+[b] - Basic farm animals[/b] — a common set available at every settlement from the start (configurable, and can be switched off).
+[b] - Cloned species[/b] — livestock shared across your whole {FACTION_TITLE} by Cloning Labs.
+
+The [i]Livestock[/i] tab on a settlement's window lists every species it can raise and which of these three sources it came from, along with what each animal produces.</description>
+        <category>CodexCat_AnimalHusbandry</category>
+        <displayOrder>0</displayOrder>
+        <iconPath>UI/Banners/Banner-PenPastures</iconPath>
+        <seeAlso>
+            <li>Codex_AH_Registering</li>
+            <li>Codex_AH_CloningLab</li>
+            <li>Codex_ResourceProduction</li>
+        </seeAlso>
+    </FactionColonies.CodexEntryDef>
+
+    <FactionColonies.CodexEntryDef>
+        <defName>Codex_AH_Registering</defName>
+        <label>Stocking Breeding Pairs</label>
+        <description>To teach a settlement a new species, bring it there yourself. Form a caravan carrying a breeding pair and travel to the settlement.
+
+A breeding pair is [b]one male and one female[/b]. Animals with no sex instead need any two individuals. A caravan only offers a species for stocking when it can't already be raised there and you are carrying a complete pair.
+
+At the settlement, use the [i]Stock Animals[/i] caravan command — also available by right-clicking the settlement — to choose which species to stock. The pair stays behind to found the herd, and that species is raised there from then on.</description>
+        <category>CodexCat_AnimalHusbandry</category>
+        <displayOrder>10</displayOrder>
+        <seeAlso>
+            <li>Codex_AH_Overview</li>
+            <li>Codex_FirstSettlement</li>
+        </seeAlso>
+    </FactionColonies.CodexEntryDef>
+
+    <FactionColonies.CodexEntryDef>
+        <defName>Codex_AH_BasicAnimals</defName>
+        <label>Basic Farm Animals</label>
+        <description>So you are not forced to hand-carry a barnyard to every new settlement, a set of [b]basic farm animals[/b] is available at all settlements from the moment they are founded — no stocking required.
+
+Which species count as "basic", and whether the feature is on at all, are set in the mod settings. The defaults are the familiar farmyard animals. Turn the feature off for a stricter game where [i]every[/i] species must be stocked by sending breeding pairs.</description>
+        <category>CodexCat_AnimalHusbandry</category>
+        <displayOrder>20</displayOrder>
+        <seeAlso>
+            <li>Codex_AH_Overview</li>
+        </seeAlso>
+    </FactionColonies.CodexEntryDef>
+
+    <FactionColonies.CodexEntryDef>
+        <defName>Codex_AH_CloningLab</defName>
+        <label>The Cloning Lab</label>
+        <description>The [b]Cloning Lab[/b] pools livestock across your whole {FACTION_TITLE}. Every species stocked at a settlement that has a Cloning Lab becomes available to [i]all[/i] of your settlements.
+
+Build one at a well-stocked settlement to spread its herd empire-wide; the more species that settlement has stocked, the more every other settlement can raise. It is a higher-tech (Spacer) building, so it arrives as a late-game way to stop managing breeding pairs settlement by settlement and run your livestock from a single hub.</description>
+        <category>CodexCat_AnimalHusbandry</category>
+        <displayOrder>30</displayOrder>
+        <seeAlso>
+            <li>Codex_AH_Overview</li>
+            <li>Codex_AH_Registering</li>
+            <li>Codex_BuildingSlots</li>
+        </seeAlso>
+    </FactionColonies.CodexEntryDef>
+
+</Defs>

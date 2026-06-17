@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    Pens & Pastures - Codex Category Definition
+
+    This CodexCategoryDef groups the submod's Codex entries in the in-game Empire
+    Codex. Entries are auto-discovered from the DefDatabase and grouped by
+    category.modId, so no base-mod changes or registration are needed.
+
+    NOTE: modId must be the package id in ALL LOWERCASE. RimWorld stores
+    ModContentPack.PackageId lowercased, and CodexCategoryDef.PackMatchesModId
+    compares against it directly. About/About.xml declares the mixed-case
+    "Matathias.Empire.AnimalHusbandry", but it is stored lowercased at runtime.
+    Mixed case still groups the entries, but the left-pane group header degrades
+    to the raw packageId and the banner fallback stops working.
+-->
+<Defs>
+
+    <FactionColonies.CodexCategoryDef>
+        <defName>CodexCat_AnimalHusbandry</defName>
+        <label>Pens &amp; Pastures</label>
+        <description>Raising livestock in your settlements: stocking breeding pairs, basic farm animals, the Cloning Lab, and how all of it feeds animal production and tithes.</description>
+        <color>(0.60, 0.45, 0.28)</color>
+        <displayOrder>15</displayOrder>
+        <modId>matathias.empire.animalhusbandry</modId>
+        <bannerPath>UI/Banners/Banner-PenPastures</bannerPath>
+    </FactionColonies.CodexCategoryDef>
+
+</Defs>
