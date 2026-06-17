@@ -21,6 +21,6 @@
 		</li>
 	</modDependencies>
 
-	<description>Adds a breeding-pair requirement for animal production. Send animals to settlements via caravan to unlock their products. Basic farm animals are available by default (configurable). The Cloning Lab building shares registered species empire-wide.</description>
+	<description>Adds a breeding-pair requirement for animal production. Send animals to settlements via caravan to unlock their products. Basic farm animals are available by default (configurable). The Cloning Lab building shares stocked species empire-wide.</description>
 
 </ModMetaData>

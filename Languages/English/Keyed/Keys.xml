@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
     <!-- Gizmo / Float menu -->
-    <AH_RegisterAnimals>Register Animals</AH_RegisterAnimals>
-    <AH_RegisterAnimalsDesc>Register breeding pairs from this caravan at {0}.</AH_RegisterAnimalsDesc>
-    <AH_RegisterAnimalsAt>Register animals at {0}</AH_RegisterAnimalsAt>
+    <AH_RegisterAnimals>Stock Animals</AH_RegisterAnimals>
+    <AH_RegisterAnimalsDesc>Stock {0} with breeding pairs from this caravan.</AH_RegisterAnimalsDesc>
+    <AH_RegisterAnimalsAt>Stock {0} with animals</AH_RegisterAnimalsAt>
 
     <!-- Dialog -->
-    <AH_RegisterTitle>Register Animals at {0}</AH_RegisterTitle>
-    <AH_RegisterDesc>Select species to register. A breeding pair will be consumed per species (or any two for genderless animals).</AH_RegisterDesc>
+    <AH_RegisterTitle>Stock {0} with Livestock</AH_RegisterTitle>
+    <AH_RegisterDesc>Select species to stock. From each, a breeding pair stays at the settlement to start its herd.</AH_RegisterDesc>
     <AH_Confirm>Confirm</AH_Confirm>
     <AH_Cancel>Cancel</AH_Cancel>
 
     <!-- Livestock tab -->
     <AH_LivestockTab>Livestock</AH_LivestockTab>
-    <AH_SourceRegistered>Registered</AH_SourceRegistered>
+    <AH_SourceRegistered>Stocked</AH_SourceRegistered>
     <AH_SourceCloned>Cloned</AH_SourceCloned>
     <AH_SourceBasic>Basic</AH_SourceBasic>
-    <AH_NoAnimals>No animals registered at this settlement.</AH_NoAnimals>
+    <AH_NoAnimals>No livestock at this settlement.</AH_NoAnimals>
     <AH_ProductsTooltip>{0} produces: {1}</AH_ProductsTooltip>
 
     <!-- Production modifier -->
-    <AH_NoAnimalsRegistered>No animals registered — animal production disabled</AH_NoAnimalsRegistered>
+    <AH_NoAnimalsRegistered>No livestock - animal production disabled</AH_NoAnimalsRegistered>
 
     <!-- Settings -->
     <AH_Title>Empire: Pens &amp; Pastures</AH_Title>
