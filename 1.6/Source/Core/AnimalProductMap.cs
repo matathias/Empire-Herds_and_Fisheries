@@ -57,6 +57,8 @@ namespace FactionColonies.AnimalHusbandry
                 CompProperties_EggLayer eggLayer = race.GetCompProperties<CompProperties_EggLayer>();
                 if (eggLayer?.eggUnfertilizedDef is object)
                     AddMapping(race, eggLayer.eggUnfertilizedDef, products);
+                if (eggLayer?.eggFertilizedDef is object)
+                    AddMapping(race, eggLayer.eggFertilizedDef, products);
             }
 
             built = true;
