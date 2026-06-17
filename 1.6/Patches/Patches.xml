@@ -9,12 +9,16 @@
         </value>
     </Operation>
 
-    <!-- Replace the base animal filter extension with our filtered subclass -->
-    <Operation Class="PatchOperationReplace">
+    <!-- Re-class the base animal filter extension to our filtered subclass.
+         AttributeSet (not Replace) so the base's child config - notably
+         <blacklistedTradeTags> (AnimalDryad/AnimalMonster/AnimalGenetic), which the
+         base mod reads via RTD_Animals.GetModExtension<ResourceFilterExtension_Animals>()
+         to build FactionCache.AllAnimalKindDefs - is preserved and inherited, rather than
+         dropped. Our subclass shares those fields, so they deserialize unchanged. -->
+    <Operation Class="PatchOperationAttributeSet">
         <xpath>/Defs/FactionColonies.ResourceTypeDef[defName="RTD_Animals"]/modExtensions/li[@Class="FactionColonies.ResourceFilterExtension_Animals"]</xpath>
-        <value>
-            <li Class="FactionColonies.AnimalHusbandry.ResourceFilterExtension_AnimalHusbandry" />
-        </value>
+        <attribute>Class</attribute>
+        <value>FactionColonies.AnimalHusbandry.ResourceFilterExtension_AnimalHusbandry</value>
     </Operation>
 
 </Patch>
