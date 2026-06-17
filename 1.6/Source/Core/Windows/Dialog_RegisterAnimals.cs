@@ -120,22 +120,13 @@ namespace FactionColonies.AnimalHusbandry
                     .Where(p => p.RaceProps is object && p.RaceProps.Animal && p.def == species)
                     .ToList();
 
-                // Prefer 1 male + 1 female
-                Pawn male = animals.FirstOrDefault(p => p.gender == Gender.Male);
-                Pawn female = animals.FirstOrDefault(p => p.gender == Gender.Female);
+                // Consume a valid breeding pair: one male + one female for gendered species,
+                // any two for genderless. Skip if no valid pair exists (the registrable-species
+                // gate already enforced this, so this is a defensive guard).
+                if (!WorldObjectComp_AnimalRegistry.TryGetBreedingPair(animals, out Pawn first, out Pawn second))
+                    continue;
 
-                List<Pawn> toRemove = new List<Pawn>();
-                if (male is object && female is object)
-                {
-                    toRemove.Add(male);
-                    toRemove.Add(female);
-                }
-                else
-                {
-                    toRemove.AddRange(animals.Take(2));
-                }
-
-                foreach (Pawn pawn in toRemove)
+                foreach (Pawn pawn in new[] { first, second })
                 {
                     caravan.RemovePawn(pawn);
                     pawn.Destroy();

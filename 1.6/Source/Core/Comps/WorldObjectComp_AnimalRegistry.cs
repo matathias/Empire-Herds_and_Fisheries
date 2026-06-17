@@ -114,12 +114,46 @@ namespace FactionColonies.AnimalHusbandry
                 LogAH.Warning($"Removed {removed} invalid animal registration(s) from {settlement.Name}");
         }
 
+        // ── Breeding Pairs ──
+
+        /// <summary>
+        /// Determines whether a list of same-species caravan animals contains a valid breeding pair,
+        /// and if so which two pawns to consume. Gendered species (RaceProps.hasGenders) require one
+        /// male and one female; genderless species require any two individuals. Returns false (with
+        /// null outputs) when no valid pair exists.
+        /// </summary>
+        public static bool TryGetBreedingPair(List<Pawn> sameSpecies, out Pawn first, out Pawn second)
+        {
+            first = null;
+            second = null;
+            if (sameSpecies is null || sameSpecies.Count < 2) return false;
+
+            bool hasGenders = sameSpecies[0].RaceProps?.hasGenders ?? false;
+            if (hasGenders)
+            {
+                Pawn male = sameSpecies.FirstOrDefault(p => p.gender == Gender.Male);
+                Pawn female = sameSpecies.FirstOrDefault(p => p.gender == Gender.Female);
+                if (male is object && female is object)
+                {
+                    first = male;
+                    second = female;
+                    return true;
+                }
+                return false;
+            }
+
+            // Genderless species: any two individuals form a pair.
+            first = sameSpecies[0];
+            second = sameSpecies[1];
+            return true;
+        }
+
         // ── Caravan Gizmos & Float Menu ──
 
         private List<ThingDef> GetRegistrableSpecies(Caravan caravan)
         {
             HashSet<ThingDef> allowed = GetAllowedAnimals();
-            Dictionary<ThingDef, int> speciesCounts = new Dictionary<ThingDef, int>();
+            Dictionary<ThingDef, List<Pawn>> bySpecies = new Dictionary<ThingDef, List<Pawn>>();
 
             foreach (Pawn pawn in caravan.PawnsListForReading)
             {
@@ -127,15 +161,18 @@ namespace FactionColonies.AnimalHusbandry
                 ThingDef race = pawn.def;
                 if (allowed.Contains(race)) continue;
 
-                int count;
-                speciesCounts.TryGetValue(race, out count);
-                speciesCounts[race] = count + 1;
+                if (!bySpecies.TryGetValue(race, out List<Pawn> list))
+                {
+                    list = new List<Pawn>();
+                    bySpecies[race] = list;
+                }
+                list.Add(pawn);
             }
 
             List<ThingDef> result = new List<ThingDef>();
-            foreach (KeyValuePair<ThingDef, int> kvp in speciesCounts)
+            foreach (KeyValuePair<ThingDef, List<Pawn>> kvp in bySpecies)
             {
-                if (kvp.Value >= 2)
+                if (TryGetBreedingPair(kvp.Value, out Pawn first, out Pawn second))
                     result.Add(kvp.Key);
             }
             return result;
