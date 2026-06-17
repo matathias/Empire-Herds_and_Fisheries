@@ -35,8 +35,7 @@ namespace FactionColonies.AnimalHusbandry
             FactionFC faction = FindFC.FactionComp;
             if (faction is null) return cachedClonedAnimals;
 
-            BuildingFCDef cloningLabDef = DefDatabase<BuildingFCDef>.GetNamedSilentFail("CloningLab");
-            if (cloningLabDef is null) return cachedClonedAnimals;
+            BuildingFCDef cloningLabDef = AnimalHusbandryDefOf.CloningLab;
 
             foreach (WorldSettlementFC settlement in faction.settlements)
             {

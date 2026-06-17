@@ -14,30 +14,31 @@ namespace FactionColonies.AnimalHusbandry
 
         // Basic animals
         public static bool BasicAnimalsEnabled = true;
-        public static List<string> BasicAnimalDefNames = new List<string>
-        {
-            "Chicken", "Cow", "Pig", "Sheep", "Goat"
-        };
 
-        private static List<ThingDef> resolvedBasicAnimals;
-        public static List<ThingDef> ResolvedBasicAnimals
+        public static List<ThingDef> BasicAnimals = new List<ThingDef>();
+
+        // Persisted form only: mod settings load before the def database exists, so we save defNames
+        // (LookMode.Value) and resolve them to ThingDefs in InitializeBasicAnimals() from
+        // [StaticConstructorOnStartup]. null => never saved (use DefOf defaults); empty => user cleared all.
+        private static List<string> savedBasicAnimalDefNames;
+
+        public static void InitializeBasicAnimals()
         {
-            get
+            BasicAnimals = new List<ThingDef>();
+            if (savedBasicAnimalDefNames is null)
             {
-                if (resolvedBasicAnimals is null)
-                    ResolveBasicAnimals();
-                return resolvedBasicAnimals;
+                BasicAnimals.Add(AnimalHusbandryDefOf.Chicken);
+                BasicAnimals.Add(AnimalHusbandryDefOf.Cow);
+                BasicAnimals.Add(AnimalHusbandryDefOf.Pig);
+                BasicAnimals.Add(AnimalHusbandryDefOf.Sheep);
+                BasicAnimals.Add(AnimalHusbandryDefOf.Goat);
+                return;
             }
-        }
-
-        public static void ResolveBasicAnimals()
-        {
-            resolvedBasicAnimals = new List<ThingDef>();
-            foreach (string defName in BasicAnimalDefNames)
+            foreach (string defName in savedBasicAnimalDefNames)
             {
                 ThingDef def = DefDatabase<ThingDef>.GetNamedSilentFail(defName);
                 if (def is object)
-                    resolvedBasicAnimals.Add(def);
+                    BasicAnimals.Add(def);
                 else
                     LogAH.Warning($"Basic animal def '{defName}' not found");
             }
@@ -48,10 +49,16 @@ namespace FactionColonies.AnimalHusbandry
             base.ExposeData();
             Scribe_Values.Look(ref printDebug, "printDebug", false);
             Scribe_Values.Look(ref BasicAnimalsEnabled, "basicAnimalsEnabled", true);
-            Scribe_Collections.Look(ref BasicAnimalDefNames, "basicAnimalDefNames", LookMode.Value);
-            if (BasicAnimalDefNames is null)
-                BasicAnimalDefNames = new List<string> { "Chicken", "Cow", "Pig", "Sheep", "Goat" };
-            resolvedBasicAnimals = null;
+
+            // Snapshot the working ThingDef list back to defNames on save.
+            // On load, InitializeBasicAnimals() resolves these at startup.
+            if (Scribe.mode == LoadSaveMode.Saving && BasicAnimals is object)
+            {
+                savedBasicAnimalDefNames = new List<string>();
+                foreach (ThingDef d in BasicAnimals)
+                    savedBasicAnimalDefNames.Add(d.defName);
+            }
+            Scribe_Collections.Look(ref savedBasicAnimalDefNames, "basicAnimalDefNames", LookMode.Value);
         }
 
         public void DoWindowContents(Rect inRect)
@@ -76,18 +83,17 @@ namespace FactionColonies.AnimalHusbandry
                 ls.Gap(8f);
                 ls.Label("AH_BasicAnimalsList".Translate());
 
-                List<string> toRemove = new List<string>();
-                foreach (string defName in BasicAnimalDefNames)
+                List<ThingDef> toRemove = new List<ThingDef>();
+                foreach (ThingDef animal in BasicAnimals)
                 {
                     Rect row = ls.GetRect(24f);
-                    Widgets.Label(new Rect(row.x + 12, row.y, row.width - 40, row.height), defName);
+                    Widgets.Label(new Rect(row.x + 12, row.y, row.width - 40, row.height), animal.LabelCap);
                     if (Widgets.ButtonImage(new Rect(row.xMax - 24, row.y, 20, 20), TexButton.Delete))
-                        toRemove.Add(defName);
+                        toRemove.Add(animal);
                 }
-                foreach (string name in toRemove)
+                foreach (ThingDef animal in toRemove)
                 {
-                    BasicAnimalDefNames.Remove(name);
-                    ResolveBasicAnimals();
+                    BasicAnimals.Remove(animal);
                     FindFC.FactionComp?.InvalidateAllSettlementStatCaches();
                 }
             }
@@ -112,7 +118,7 @@ namespace FactionColonies.AnimalHusbandry
                 CloningCache.Clear();
             });
             AnimalProductMap.EnsureBuilt();
-            FCAHSettings.ResolveBasicAnimals();
+            FCAHSettings.InitializeBasicAnimals();
             LogAH.MessageForce("Animal Husbandry initialized");
         }
     }

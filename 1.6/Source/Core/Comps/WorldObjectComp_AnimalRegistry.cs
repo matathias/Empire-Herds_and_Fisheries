@@ -43,7 +43,7 @@ namespace FactionColonies.AnimalHusbandry
 
             if (FCAHSettings.BasicAnimalsEnabled)
             {
-                foreach (ThingDef def in FCAHSettings.ResolvedBasicAnimals)
+                foreach (ThingDef def in FCAHSettings.BasicAnimals)
                     result.Add(def);
             }
 
@@ -54,7 +54,7 @@ namespace FactionColonies.AnimalHusbandry
         public bool HasAnyAnimals()
         {
             if (registeredAnimals.Count > 0) return true;
-            if (FCAHSettings.BasicAnimalsEnabled && FCAHSettings.ResolvedBasicAnimals.Count > 0)
+            if (FCAHSettings.BasicAnimalsEnabled && FCAHSettings.BasicAnimals.Count > 0)
                 return true;
             if (CloningCache.GetClonedAnimals().Count > 0) return true;
             return false;
