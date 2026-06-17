@@ -5,6 +5,10 @@
     <AH_RegisterAnimalsDesc>Send animals from this caravan to {0}. Production begins once both a male and a female (or two of a genderless species) have arrived.</AH_RegisterAnimalsDesc>
     <AH_RegisterAnimalsAt>Stock {0} with animals</AH_RegisterAnimalsAt>
 
+    <!-- Transport-pod arrival -->
+    <AH_StockAnimalsAt>Stock animals at {0}</AH_StockAnimalsAt>
+    <AH_AnimalsStockedMsg>{0} animal(s) stocked at {1}.</AH_AnimalsStockedMsg>
+
     <!-- Dialog -->
     <AH_RegisterTitle>Stock {0} with Livestock</AH_RegisterTitle>
     <AH_RegisterDesc>Send individual animals to stock this settlement. A species needs a male and a female (or two of a genderless species) before it can produce.</AH_RegisterDesc>

@@ -237,28 +237,28 @@ namespace FactionColonies.AnimalHusbandry
                     if (sel.male)
                     {
                         Pawn m = pool.FirstOrDefault(p => p.gender == Gender.Male);
-                        if (m is object) ConsumeAndRecord(sp, m, Gender.Male);
+                        if (m is object) ConsumeAndRecord(m);
                     }
                     if (sel.female)
                     {
                         Pawn f = pool.FirstOrDefault(p => p.gender == Gender.Female);
-                        if (f is object) ConsumeAndRecord(sp, f, Gender.Female);
+                        if (f is object) ConsumeAndRecord(f);
                     }
                 }
                 else
                 {
                     for (int i = 0; i < sel.genderless && i < pool.Count; i++)
-                        ConsumeAndRecord(sp, pool[i], Gender.None);
+                        ConsumeAndRecord(pool[i]);
                 }
             }
         }
 
-        private void ConsumeAndRecord(ThingDef sp, Pawn pawn, Gender gender)
+        // Detach from the caravan, then hand off to the registry's shared consume logic
+        // (records the species/sex and destroys the pawn). Same path the transport-pod arrival uses.
+        private void ConsumeAndRecord(Pawn pawn)
         {
             caravan.RemovePawn(pawn);
-            pawn.Destroy();
-            comp.AddIndividual(sp, gender);
-            LogAH.MessageForce($"Stocked 1 {gender} {sp.defName} at {comp.Settlement.Name}");
+            comp.StockIndividual(pawn);
         }
     }
 }

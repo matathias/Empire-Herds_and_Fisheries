@@ -8,15 +8,20 @@ using Verse;
 
 namespace FactionColonies.AnimalHusbandry
 {
-    public class WorldObjectComp_AnimalRegistry : WorldObjectComp,
+    public class WorldObjectComp_AnimalRegistry : WorldObjectComp_SettlementPawnArrival,
         IResourceProductionModifier, ISettlementWindowOverview, ISettlementPostLoadInit
     {
         // Per-species stocking progress. A species is "available for production" only once its
         // entry IsComplete (male+female, or 2+ for genderless). Partial entries persist as in-progress.
         private List<AnimalStockEntry> animalStock = new List<AnimalStockEntry>();
 
-        private WorldSettlementFC _settlement;
         private Vector2 scrollPosition;
+
+        // Set by ReceivePawns so the post-arrival message reports what was actually stocked,
+        // not the raw pod headcount (some pod pawns can overflow back to a caravan).
+        private int lastStockedCount;
+
+        // Settlement is inherited from WorldObjectComp_SettlementPawnArrival (parent as WorldSettlementFC).
 
         private AnimalStockEntry FindEntry(ThingDef species)
         {
@@ -26,16 +31,6 @@ namespace FactionColonies.AnimalHusbandry
                     return animalStock[i];
             }
             return null;
-        }
-
-        public WorldSettlementFC Settlement
-        {
-            get
-            {
-                if (_settlement is null)
-                    _settlement = parent as WorldSettlementFC;
-                return _settlement;
-            }
         }
 
         /// <summary>
@@ -123,6 +118,75 @@ namespace FactionColonies.AnimalHusbandry
         public bool StillNeeds(ThingDef species, Gender gender)
         {
             return (FindEntry(species) ?? new AnimalStockEntry(species)).Needs(gender);
+        }
+
+        /* -*-*-*- Transport-pod arrival (WorldObjectComp_SettlementPawnArrival) -*-*-*- */
+
+        /* The single-pawn form of the caravan contribution rule (GetContributableSpecies /
+           CaravanCanContribute): accept an animal whose species isn't already available here
+           (producing / basic / cloned) and whose sex the settlement still needs. Anything rejected
+           (non-animal, already-available species, sex already stocked) falls through to the base
+           arrival fallback, which forms a caravan, so nothing is lost. */
+        public override bool AcceptsPawn(Pawn pawn)
+        {
+            if (pawn?.def?.race is null || !pawn.def.race.Animal) return false;
+            if (GetAllowedAnimals().Contains(pawn.def)) return false;
+            return StillNeeds(pawn.def, pawn.gender);
+        }
+
+        public override string ArrivalMenuLabel => "AH_StockAnimalsAt".Translate(Settlement.Name);
+
+        public override string ArrivalMessage(List<Pawn> pawns)
+            => "AH_AnimalsStockedMsg".Translate(lastStockedCount, Settlement.Name);
+
+        public override void ReceivePawns(List<Pawn> pawns)
+        {
+            if (pawns is null) return;
+
+            lastStockedCount = 0;
+            List<Pawn> overflow = null;
+            for (int i = 0; i < pawns.Count; i++)
+            {
+                Pawn pawn = pawns[i];
+
+                /* Re-check live: an earlier pawn in this same pod may have just filled the sex
+                   (e.g. two males of a brand-new species arriving together), so the registry no
+                   longer needs this one even though AcceptsPawn passed against the pre-arrival state. */
+                if (pawn?.def?.race is object && pawn.def.race.Animal
+                    && !GetAllowedAnimals().Contains(pawn.def)
+                    && StillNeeds(pawn.def, pawn.gender))
+                {
+                    StockIndividual(pawn);
+                    lastStockedCount++;
+                }
+                else
+                {
+                    if (overflow is null) overflow = new List<Pawn>();
+                    overflow.Add(pawn);
+                }
+            }
+
+            // Anything we couldn't stock becomes a caravan at the settlement tile (mirrors
+            // SettlementPawnArrivalFallback), so a player never loses an animal to over-stocking.
+            if (overflow is object && overflow.Count > 0)
+                CaravanMaker.MakeCaravan(overflow, Faction.OfPlayer, Settlement.Tile, true);
+        }
+
+        /* Abstracts one received individual into stock: record its species/sex, then destroy the
+           pawn (the registry tracks stock abstractly, not live Pawns). Shared by the caravan
+           register dialog and the transport-pod arrival path. The caller first detaches the pawn
+           from any caravan it sits in; WorldPawns removal here defends the cases noted in the base
+           prisoner comp (redressed / dropped pawns). */
+        public void StockIndividual(Pawn pawn)
+        {
+            if (pawn is null) return;
+            ThingDef species = pawn.def;
+            Gender gender = pawn.gender;
+            if (Find.WorldPawns is object && Find.WorldPawns.Contains(pawn))
+                Find.WorldPawns.RemovePawn(pawn);
+            if (!pawn.Destroyed) pawn.Destroy();
+            AddIndividual(species, gender);
+            LogAH.MessageForce($"Stocked 1 {gender} {species.defName} at {Settlement.Name}");
         }
 
         // ── IResourceProductionModifier ──
@@ -254,7 +318,6 @@ namespace FactionColonies.AnimalHusbandry
 
         public void PreOpenWindow(WorldSettlementFC s)
         {
-            _settlement = s;
             scrollPosition = Vector2.zero;
         }
 
