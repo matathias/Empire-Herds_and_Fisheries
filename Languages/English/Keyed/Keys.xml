@@ -7,7 +7,7 @@
 
     <!-- Dialog -->
     <AH_RegisterTitle>Register Animals at {0}</AH_RegisterTitle>
-    <AH_RegisterDesc>Select species to register. Two animals will be consumed per species as a breeding pair.</AH_RegisterDesc>
+    <AH_RegisterDesc>Select species to register. A breeding pair will be consumed per species (or any two for genderless animals).</AH_RegisterDesc>
     <AH_Confirm>Confirm</AH_Confirm>
     <AH_Cancel>Cancel</AH_Cancel>
 
