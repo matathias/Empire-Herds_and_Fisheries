@@ -27,11 +27,15 @@ namespace FactionColonies.AnimalHusbandry
 
         public Dialog_PickBasicAnimal()
         {
-            // category == Pawn excludes corpse defs, which share the living race's RaceProperties
-            // (ThingDefGenerator_Corpses sets corpse.race = pawn.race) and would otherwise match.
-            candidates = DefDatabase<ThingDef>.AllDefsListForReading
-                .Where(d => d.category == ThingCategory.Pawn && d.race is object && d.race.Animal
-                    && !FCAHSettings.BasicAnimals.Contains(d))
+            // Use the same animal filter as the RTD_Animals resource (FactionCache.AllAnimalKindDefs is
+            // built from PawnKindDefExtensions.IsAnimalAndAllowed), so the picker allows/blacklists the
+            // same animals - notably excluding dryads, monster, and genetic animals. Map each allowed
+            // kind to its race ThingDef (BasicAnimals is race-based, like the rest of the submod) and
+            // de-duplicate, since multiple PawnKindDefs can share a race.
+            candidates = FactionCache.AllAnimalKindDefs
+                .Select(kind => kind.race)
+                .Distinct()
+                .Where(race => !FCAHSettings.BasicAnimals.Contains(race))
                 .OrderBy(d => d.label ?? d.defName, StringComparer.OrdinalIgnoreCase)
                 .ToList();
 
