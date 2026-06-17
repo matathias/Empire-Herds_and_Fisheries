@@ -27,8 +27,11 @@ namespace FactionColonies.AnimalHusbandry
 
         public Dialog_PickBasicAnimal()
         {
+            // category == Pawn excludes corpse defs, which share the living race's RaceProperties
+            // (ThingDefGenerator_Corpses sets corpse.race = pawn.race) and would otherwise match.
             candidates = DefDatabase<ThingDef>.AllDefsListForReading
-                .Where(d => d.race is object && d.race.Animal && !FCAHSettings.BasicAnimals.Contains(d))
+                .Where(d => d.category == ThingCategory.Pawn && d.race is object && d.race.Animal
+                    && !FCAHSettings.BasicAnimals.Contains(d))
                 .OrderBy(d => d.label ?? d.defName, StringComparer.OrdinalIgnoreCase)
                 .ToList();
 

@@ -72,8 +72,23 @@ namespace FactionColonies.AnimalHusbandry
 
         public void DoWindowContents(Rect inRect)
         {
+            // Pin "Open Patch Notes" to the bottom as a footer, separated from everything above
+            // by a GapLine-style line.
+            float footerButtonHeight = 32f;
+            Rect patchNotesRect = new Rect(inRect.x, inRect.yMax - footerButtonHeight, inRect.width, footerButtonHeight);
+            if (Widgets.ButtonText(patchNotesRect, "AH_OpenPatchNotes".Translate()))
+                Find.WindowStack.Add(new PatchNotesDisplayWindow("matathias.empire.animalhusbandry", "AH_PatchTitle".Translate()));
+
+            float lineY = patchNotesRect.y - 12f;
+            Color prevColor = GUI.color;
+            GUI.color = prevColor * new Color(1f, 1f, 1f, 0.4f);
+            Widgets.DrawLineHorizontal(inRect.x, lineY, inRect.width);
+            GUI.color = prevColor;
+
+            Rect mainRect = new Rect(inRect.x, inRect.y, inRect.width, lineY - inRect.y);
+
             Listing_Standard ls = new Listing_Standard();
-            ls.Begin(inRect);
+            ls.Begin(mainRect);
 
             ls.CheckboxLabeled("AH_DebugLogging".Translate(), ref printDebug);
             ls.GapLine();
@@ -110,10 +125,6 @@ namespace FactionColonies.AnimalHusbandry
                 if (ls.ButtonText("AH_AddBasicAnimal".Translate()))
                     Find.WindowStack.Add(new Dialog_PickBasicAnimal());
             }
-
-            ls.Gap(12f);
-            if (ls.ButtonText("AH_OpenPatchNotes".Translate()))
-                Find.WindowStack.Add(new PatchNotesDisplayWindow("matathias.empire.animalhusbandry", "AH_PatchTitle".Translate()));
 
             ls.Gap(12f);
             if (ls.ButtonText("AH_ResetSettings".Translate()))
