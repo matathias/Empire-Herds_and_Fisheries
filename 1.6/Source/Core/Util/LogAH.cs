@@ -14,17 +14,17 @@ namespace FactionColonies.AnimalHusbandry
         }
         public static void MessageForce(string message)
         {
-            Log.Message($"{Slug} {message}");
+            Log.Message($"{Slug}[Force] {message}");
         }
 
         public static void Warning(string message)
         {
-            Log.Warning($"{Slug} {message}");
+            Log.Warning($"{Slug}[WARN] {message}");
         }
 
         public static void Error(string message)
         {
-            Log.Error($"{Slug} {message}");
+            Log.Error($"{Slug}[ERR] {message}");
         }
     }
 }
