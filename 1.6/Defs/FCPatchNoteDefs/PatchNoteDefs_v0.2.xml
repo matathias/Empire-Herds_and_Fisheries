@@ -17,4 +17,18 @@
 		<li>Matathias</li>
 		</authors>
 	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="AHPatchBase">
+		<defName>AH_0_2_1</defName>
+		<label>Merc Update</label>
+		<description>Restricts the animals you can choose in the Unit Designer to only those that the player&apos;s Empire has access to.</description>
+		<releaseDate>2026-06-17</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Restricts the list of animals that the player can assign to mercs</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
 </Defs>

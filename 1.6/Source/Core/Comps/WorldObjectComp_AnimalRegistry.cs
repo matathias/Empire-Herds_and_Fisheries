@@ -110,6 +110,7 @@ namespace FactionColonies.AnimalHusbandry
             if (!wasComplete && entry.IsComplete)
             {
                 CloningCache.Invalidate();
+                StockedAnimalCache.Invalidate();
                 Settlement?.InvalidateResourceCaches();
             }
         }

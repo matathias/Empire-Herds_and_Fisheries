@@ -110,6 +110,7 @@ namespace FactionColonies.AnimalHusbandry
             if (chosen is object)
             {
                 FCAHSettings.BasicAnimals.Add(chosen);
+                StockedAnimalCache.Invalidate();
                 FindFC.FactionComp?.InvalidateAllSettlementStatCaches();
                 Close();
             }

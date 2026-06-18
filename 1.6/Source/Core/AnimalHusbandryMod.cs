@@ -20,6 +20,10 @@ namespace FactionColonies.AnimalHusbandry
         // Fish (Odyssey) are gated to water-adjacent settlements, orthogonal to the breeding-pair rule.
         public static bool RestrictFishToWater = true;
 
+        // Gate the military unit designer's animal/mount pickers to animals at least one settlement
+        // has stocked (the empire-wide allowed set). Off => the vanilla full animal list.
+        public static bool RestrictMercAnimalsToStocked = true;
+
         // Persisted form only: mod settings load before the def database exists, so we save defNames
         // (LookMode.Value) and resolve them to ThingDefs in InitializeBasicAnimals() from
         // [StaticConstructorOnStartup]. null => never saved (use DefOf defaults); empty => user cleared all.
@@ -52,8 +56,10 @@ namespace FactionColonies.AnimalHusbandry
             printDebug = false;
             BasicAnimalsEnabled = true;
             RestrictFishToWater = true;
+            RestrictMercAnimalsToStocked = true;
             savedBasicAnimalDefNames = null;   // "never saved" => InitializeBasicAnimals re-adds the defaults
             InitializeBasicAnimals();
+            StockedAnimalCache.Invalidate();   // basic-animal list changed
             FindFC.FactionComp?.InvalidateAllSettlementStatCaches();
         }
 
@@ -63,6 +69,7 @@ namespace FactionColonies.AnimalHusbandry
             Scribe_Values.Look(ref printDebug, "printDebug", false);
             Scribe_Values.Look(ref BasicAnimalsEnabled, "basicAnimalsEnabled", true);
             Scribe_Values.Look(ref RestrictFishToWater, "restrictFishToWater", true);
+            Scribe_Values.Look(ref RestrictMercAnimalsToStocked, "restrictMercAnimalsToStocked", true);
 
             // Snapshot the working ThingDef list back to defNames on save.
             // On load, InitializeBasicAnimals() resolves these at startup.
@@ -105,7 +112,10 @@ namespace FactionColonies.AnimalHusbandry
                 "AH_BasicAnimalsEnabledDesc".Translate());
 
             if (prevBasic != BasicAnimalsEnabled)
+            {
+                StockedAnimalCache.Invalidate();
                 FindFC.FactionComp?.InvalidateAllSettlementStatCaches();
+            }
 
             if (BasicAnimalsEnabled)
             {
@@ -123,6 +133,7 @@ namespace FactionColonies.AnimalHusbandry
                 foreach (ThingDef animal in toRemove)
                 {
                     BasicAnimals.Remove(animal);
+                    StockedAnimalCache.Invalidate();
                     FindFC.FactionComp?.InvalidateAllSettlementStatCaches();
                 }
 
@@ -142,6 +153,18 @@ namespace FactionColonies.AnimalHusbandry
             if (prevFish != RestrictFishToWater)
                 FindFC.FactionComp?.InvalidateAllSettlementStatCaches();
 
+            ls.GapLine();
+
+            bool prevMercAnimals = RestrictMercAnimalsToStocked;
+            ls.CheckboxLabeled(
+                "AH_RestrictMercAnimalsToStocked".Translate(),
+                ref RestrictMercAnimalsToStocked,
+                "AH_RestrictMercAnimalsToStockedDesc".Translate());
+
+            // The set doesn't change, but the gate flips, so the picker should reflect it immediately.
+            if (prevMercAnimals != RestrictMercAnimalsToStocked)
+                StockedAnimalCache.Invalidate();
+
             ls.Gap(12f);
             if (ls.ButtonText("AH_ResetSettings".Translate()))
                 ResetToDefaults();
@@ -156,10 +179,17 @@ namespace FactionColonies.AnimalHusbandry
         static AnimalHusbandryStartup()
         {
             new Harmony("Matathias.Empire.AnimalHusbandry").PatchAll(Assembly.GetExecutingAssembly());
+
+            // Gate the base mod's unit-designer animal/mount pickers to stocked animals.
+            EmpireRegistry.Register(MercAnimalStockFilter.Instance);
+
             EmpireCacheUtil.RegisterCacheInvalidator("AnimalHusbandry", () =>
             {
                 AnimalProductMap.Clear();
                 CloningCache.Clear();
+                StockedAnimalCache.Clear();
+                // InvalidateAll runs EmpireRegistry.ClearAll() before these callbacks, so re-register.
+                EmpireRegistry.Register(MercAnimalStockFilter.Instance);
             });
             AnimalProductMap.EnsureBuilt();
             FCAHSettings.InitializeBasicAnimals();

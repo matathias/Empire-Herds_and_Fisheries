@@ -49,6 +49,8 @@
     <AH_AddBasicAnimal>Add animal...</AH_AddBasicAnimal>
     <AH_RestrictFishToWater>Restrict fish to water-adjacent settlements</AH_RestrictFishToWater>
     <AH_RestrictFishToWaterDesc>When enabled (Odyssey only), settlements produce only the fish their biome offers for the water their tile touches: coastal settlements get saltwater fish, river or lakeshore settlements get freshwater fish. A water-adjacent settlement yields fish even with no registered livestock; land animal products still need breeding pairs.</AH_RestrictFishToWaterDesc>
+    <AH_RestrictMercAnimalsToStocked>Restrict merc animals to stocked species</AH_RestrictMercAnimalsToStocked>
+    <AH_RestrictMercAnimalsToStockedDesc>When enabled, the military unit designer's animal and mount pickers only offer animals that at least one settlement in the Empire has stocked (registered breeding pairs, plus basic animals and Cloning Lab-shared species). Disable to choose from every animal, as in the base mod.</AH_RestrictMercAnimalsToStockedDesc>
     <AH_ResetSettings>Reset to default</AH_ResetSettings>
     <AH_DebugLogging>Enable debug logging</AH_DebugLogging>
 

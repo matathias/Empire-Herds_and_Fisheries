@@ -8,6 +8,8 @@ Enter **Empire Refactored: Herds & Fisheries**. With this mod, animals (beyond t
 
 Fishing is affected differently - settlements only have access to fish if they're located on a river, lakeshore, or coast. And even then, they'll only have access to the appropriate fish of their biome.
 
+When designing mercs, you will only be able to assign them animals that your Empire has access to.
+
 And, to top it all off - if a settlement doesn't have access to *any* live animals, then its animal resource production is zeroed out.
 
 Time to get ranching!
