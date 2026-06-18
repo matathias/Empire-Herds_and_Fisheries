@@ -33,6 +33,8 @@
     <AH_GenderlessProgress>{0} / {1}</AH_GenderlessProgress>
     <AH_NoAnimals>No livestock at this settlement.</AH_NoAnimals>
     <AH_ProductsTooltip>{0} produces: {1}</AH_ProductsTooltip>
+    <AH_FishAvailable>On water - fish can be produced here</AH_FishAvailable>
+    <AH_FishUnavailable>Landlocked - no fish (needs a coast, river, or lakeshore)</AH_FishUnavailable>
 
     <!-- Production modifier -->
     <AH_NoAnimalsRegistered>No livestock - animal production disabled</AH_NoAnimalsRegistered>
@@ -45,6 +47,8 @@
     <AH_BasicAnimalsEnabledDesc>When enabled, basic farm animals (Chicken, Cow, Pig, Sheep, Goat) are available at all settlements without needing to send breeding pairs.</AH_BasicAnimalsEnabledDesc>
     <AH_BasicAnimalsList>Basic animals:</AH_BasicAnimalsList>
     <AH_AddBasicAnimal>Add animal...</AH_AddBasicAnimal>
+    <AH_RestrictFishToWater>Restrict fish to water-adjacent settlements</AH_RestrictFishToWater>
+    <AH_RestrictFishToWaterDesc>When enabled (Odyssey only), settlements can produce fish only if their tile is on a coast, river, or lakeshore. A water-adjacent settlement yields fish even with no registered livestock; land animal products still need breeding pairs.</AH_RestrictFishToWaterDesc>
     <AH_ResetSettings>Reset to default</AH_ResetSettings>
     <AH_DebugLogging>Enable debug logging</AH_DebugLogging>
 

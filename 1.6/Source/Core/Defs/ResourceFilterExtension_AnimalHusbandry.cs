@@ -29,18 +29,28 @@ namespace FactionColonies.AnimalHusbandry
             {
                 // No animals — don't add races, and remove category-allowed products
                 RemoveNonAllowedProducts(filter, new HashSet<ThingDef>());
-                return;
             }
-
-            // Add only allowed animal races
-            foreach (PawnKindDef def in FactionCache.AllAnimalKindDefs)
+            else
             {
-                if (allowed.Contains(def.race))
-                    filter.SetAllow(def.race, true);
+                // Add only allowed animal races
+                foreach (PawnKindDef def in FactionCache.AllAnimalKindDefs)
+                {
+                    if (allowed.Contains(def.race))
+                        filter.SetAllow(def.race, true);
+                }
+
+                // Remove products from non-allowed animals (categories already allowed them)
+                RemoveNonAllowedProducts(filter, allowed);
             }
 
-            // Remove products from non-allowed animals (categories already allowed them)
-            RemoveNonAllowedProducts(filter, allowed);
+            // Orthogonal water gate: fish (a MeatRaw-derived category, kept above as an "unknown
+            // product") require water access regardless of breeding pairs. Remove them when the
+            // settlement is landlocked. Inert without Odyssey (Fish category is null then).
+            if (comp is object && ModsConfig.OdysseyActive && FCAHSettings.RestrictFishToWater
+                && !comp.HasWaterAccess() && ThingCategoryDefOf.Fish is object)
+            {
+                filter.SetAllow(ThingCategoryDefOf.Fish, false);
+            }
         }
 
         private static void RemoveNonAllowedProducts(ThingFilter filter, HashSet<ThingDef> allowed)

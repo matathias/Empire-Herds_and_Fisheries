@@ -189,6 +189,41 @@ namespace FactionColonies.AnimalHusbandry
             LogAH.MessageForce($"Stocked 1 {gender} {species.defName} at {Settlement.Name}");
         }
 
+        // ── Water access (fish) ──
+
+        // Tile geography is static, so the coast/lake/river lookup is computed once and cached.
+        // Not serialized: it's deterministic from the tile, so it's recomputed lazily after load.
+        private bool? hasWaterAccessCached;
+
+        /// <summary>True if this settlement's tile is on a coast, lakeshore, or river.</summary>
+        public bool HasWaterAccess()
+        {
+            if (hasWaterAccessCached.HasValue)
+                return hasWaterAccessCached.Value;
+
+            PlanetTile pt = Settlement is object ? Settlement.Tile : PlanetTile.Invalid;
+            if (!pt.Valid) return false;   // world/settlement not ready yet; recompute later
+            Tile t = pt.Tile;
+            if (t is null) return false;
+
+            bool water = t.IsCoastal                                // coast (ocean-adjacent)
+                || Find.World.LakeDirectionAt(pt) != Rot4.Invalid;  // lakeshore
+            if (!water)
+            {
+                SurfaceTile st = t as SurfaceTile;                  // river
+                water = st is object && st.Rivers is object && st.Rivers.Count > 0;
+            }
+
+            hasWaterAccessCached = water;
+            return water;
+        }
+
+        // Fish (Odyssey) are an axis orthogonal to breeding pairs: gated purely by water access.
+        public bool CanProduceFishFromWater()
+        {
+            return ModsConfig.OdysseyActive && FCAHSettings.RestrictFishToWater && HasWaterAccess();
+        }
+
         // ── IResourceProductionModifier ──
 
         public double GetResourceAdditiveModifier(ResourceFC resource)
@@ -199,7 +234,9 @@ namespace FactionColonies.AnimalHusbandry
         public double GetResourceMultiplierModifier(ResourceFC resource)
         {
             if (resource.def != ResourceTypeDefOf.RTD_Animals) return 1;
-            return HasAnyAnimals() ? 1 : 0;
+            if (HasAnyAnimals()) return 1;
+            if (CanProduceFishFromWater()) return 1;   // water enables fish with no breeding pairs
+            return 0;
         }
 
         public string GetResourceAdditiveDesc(ResourceFC resource)
@@ -210,9 +247,9 @@ namespace FactionColonies.AnimalHusbandry
         public string GetResourceMultiplierDesc(ResourceFC resource)
         {
             if (resource.def != ResourceTypeDefOf.RTD_Animals) return null;
-            if (!HasAnyAnimals())
-                return "AH_NoAnimalsRegistered".Translate();
-            return null;
+            if (HasAnyAnimals()) return null;
+            if (CanProduceFishFromWater()) return null;   // producing fish from water, not zero
+            return "AH_NoAnimalsRegistered".Translate();
         }
 
         // ── Serialization ──
@@ -357,8 +394,26 @@ namespace FactionColonies.AnimalHusbandry
             Text.Anchor = TextAnchor.UpperLeft;
             Widgets.Label(headerRect, "AH_StockedHeader".Translate());
             Text.Font = GameFont.Small;
-            Rect listBox = new Rect(boundingBox.x, boundingBox.y + headerHeight,
-                boundingBox.width, boundingBox.height - headerHeight);
+
+            float offsetY = boundingBox.y + headerHeight;
+
+            // Fish water-access status (Odyssey + setting): geography only, independent of pairs.
+            if (ModsConfig.OdysseyActive && FCAHSettings.RestrictFishToWater)
+            {
+                float fishLineHeight = 24f;
+                Rect fishRect = new Rect(boundingBox.x, offsetY, boundingBox.width, fishLineHeight);
+                bool water = HasWaterAccess();
+                Color prev = GUI.color;
+                if (!water) GUI.color = new Color(0.7f, 0.7f, 0.7f);
+                Text.Anchor = TextAnchor.MiddleLeft;
+                Widgets.Label(fishRect, (water ? "AH_FishAvailable" : "AH_FishUnavailable").Translate());
+                Text.Anchor = TextAnchor.UpperLeft;
+                GUI.color = prev;
+                offsetY += fishLineHeight;
+            }
+
+            Rect listBox = new Rect(boundingBox.x, offsetY,
+                boundingBox.width, boundingBox.height - (offsetY - boundingBox.y));
 
             float rowHeight = 32f;
             float sectionHeaderHeight = 28f;

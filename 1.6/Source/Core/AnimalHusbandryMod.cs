@@ -17,6 +17,9 @@ namespace FactionColonies.AnimalHusbandry
 
         public static List<ThingDef> BasicAnimals = new List<ThingDef>();
 
+        // Fish (Odyssey) are gated to water-adjacent settlements, orthogonal to the breeding-pair rule.
+        public static bool RestrictFishToWater = true;
+
         // Persisted form only: mod settings load before the def database exists, so we save defNames
         // (LookMode.Value) and resolve them to ThingDefs in InitializeBasicAnimals() from
         // [StaticConstructorOnStartup]. null => never saved (use DefOf defaults); empty => user cleared all.
@@ -48,6 +51,7 @@ namespace FactionColonies.AnimalHusbandry
         {
             printDebug = false;
             BasicAnimalsEnabled = true;
+            RestrictFishToWater = true;
             savedBasicAnimalDefNames = null;   // "never saved" => InitializeBasicAnimals re-adds the defaults
             InitializeBasicAnimals();
             FindFC.FactionComp?.InvalidateAllSettlementStatCaches();
@@ -58,6 +62,7 @@ namespace FactionColonies.AnimalHusbandry
             base.ExposeData();
             Scribe_Values.Look(ref printDebug, "printDebug", false);
             Scribe_Values.Look(ref BasicAnimalsEnabled, "basicAnimalsEnabled", true);
+            Scribe_Values.Look(ref RestrictFishToWater, "restrictFishToWater", true);
 
             // Snapshot the working ThingDef list back to defNames on save.
             // On load, InitializeBasicAnimals() resolves these at startup.
@@ -125,6 +130,17 @@ namespace FactionColonies.AnimalHusbandry
                 if (ls.ButtonText("AH_AddBasicAnimal".Translate()))
                     Find.WindowStack.Add(new Dialog_PickBasicAnimal());
             }
+
+            ls.GapLine();
+
+            bool prevFish = RestrictFishToWater;
+            ls.CheckboxLabeled(
+                "AH_RestrictFishToWater".Translate(),
+                ref RestrictFishToWater,
+                "AH_RestrictFishToWaterDesc".Translate());
+
+            if (prevFish != RestrictFishToWater)
+                FindFC.FactionComp?.InvalidateAllSettlementStatCaches();
 
             ls.Gap(12f);
             if (ls.ButtonText("AH_ResetSettings".Translate()))
