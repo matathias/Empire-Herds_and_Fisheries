@@ -15,4 +15,4 @@ And, to top it all off - if a settlement doesn't have access to *any* live anima
 Time to get ranching!
 
 ## Dependencies
-**Depends on [Empire Refactored: Routes & Resources](https://github.com/matathias/Empire-Routes_and_Resources)**.
+**Depends on [Empire Refactored](https://github.com/matathias/Empire-1_6-Continued)** (Obviously).
