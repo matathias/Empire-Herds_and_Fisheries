@@ -13,6 +13,8 @@ namespace FactionColonies.AnimalHusbandry
     {
         private static Dictionary<ThingDef, HashSet<ThingDef>> animalToProducts;
         private static Dictionary<ThingDef, HashSet<ThingDef>> productToAnimals;
+        // Products already warned about (no associated animal), so the block is logged once each.
+        private static readonly HashSet<ThingDef> warnedUnmappedProducts = new HashSet<ThingDef>();
         private static bool built = false;
 
         public static void EnsureBuilt()
@@ -25,6 +27,7 @@ namespace FactionColonies.AnimalHusbandry
         {
             animalToProducts = null;
             productToAnimals = null;
+            warnedUnmappedProducts.Clear();
             built = false;
         }
 
@@ -59,6 +62,11 @@ namespace FactionColonies.AnimalHusbandry
                     AddMapping(race, eggLayer.eggUnfertilizedDef, products);
                 if (eggLayer?.eggFertilizedDef is object)
                     AddMapping(race, eggLayer.eggFertilizedDef, products);
+
+                // Insect jelly has no producing comp (vanilla Hives spawn it), so associate it with any
+                // insect race so insect-stocked settlements produce it and non-insect settlements don't.
+                if (race.race is object && race.race.Insect)
+                    AddMapping(race, ThingDefOf.InsectJelly, products);
             }
 
             built = true;
@@ -83,21 +91,47 @@ namespace FactionColonies.AnimalHusbandry
         }
 
         /// <summary>
-        /// True if any animal producing this product is in the allowed set.
-        /// Products with no known animal source are always allowed (safety for modded content).
+        /// True if any animal producing this product is in the allowed set. A product with no
+        /// associated animal is blocked (and logged once) rather than let through — the exception
+        /// being fish, which are gated orthogonally by water access in the filter's water gate.
         /// </summary>
         public static bool IsProductAllowed(ThingDef product, HashSet<ThingDef> allowedAnimals)
         {
             EnsureBuilt();
             HashSet<ThingDef> producers;
             if (!productToAnimals.TryGetValue(product, out producers))
-                return true; // unknown product, always allowed
+            {
+                // Fish (Odyssey) are gated orthogonally by water access in ResourceFilterExtension_
+                // AnimalHusbandry's water gate, not by breeding pairs. Leave that decision to the
+                // filter — don't block them here on the basis of having no producing animal.
+                if (IsWaterGatedProduct(product)) return true;
+
+                // Reversed default: an animal-category product with no associated animal is BLOCKED,
+                // not let through (was the leak that put insect jelly into every settlement's animal
+                // production).
+                WarnUnmappedProductOnce(product);
+                return false;
+            }
             foreach (ThingDef producer in producers)
             {
                 if (allowedAnimals.Contains(producer))
                     return true;
             }
             return false;
+        }
+
+        private static bool IsWaterGatedProduct(ThingDef def)
+        {
+            return ModsConfig.OdysseyActive
+                && ThingCategoryDefOf.Fish is object
+                && def.IsWithinCategory(ThingCategoryDefOf.Fish);
+        }
+
+        private static void WarnUnmappedProductOnce(ThingDef product)
+        {
+            if (warnedUnmappedProducts.Add(product))
+                LogAH.Warning($"Animal-category product '{product.defName}' has no associated animal; "
+                    + "blocking it from animal production.");
         }
 
         public static bool IsKnownAnimal(ThingDef race)
