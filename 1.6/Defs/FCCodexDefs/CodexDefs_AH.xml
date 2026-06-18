@@ -17,17 +17,17 @@
     <FactionColonies.CodexEntryDef>
         <defName>Codex_AH_Overview</defName>
         <label>Raising Livestock</label>
-        <description>With [b]Empire Refactored: Herds &amp; Fisheries[/b], your settlements no longer conjure animals and animal goods out of nothing. The animals resource is now tied to the species a settlement can actually raise — if it can raise none, it produces no animal goods at all, no matter how many workers you assign.
+        <description>With [b]Empire Refactored: Herds &amp; Fisheries[/b], your settlements no longer conjure animals and animal goods out of nothing. The animals resource is now tied to the species a settlement can actually raise; if it can't raise any, then it produces no animal goods at all, no matter how many workers you assign.
 
-A settlement's [b]herds[/b] — its land livestock — can draw on three sources:
+A settlement's [b]herds[/b] — that is, its land livestock — can draw on three sources:
 
-[b] - Stocked breeding pairs[/b] — species you have personally delivered to that settlement and bred. These are local to the settlement that raised them.
-[b] - Basic farm animals[/b] — a common set available at every settlement from the start (configurable, and can be switched off).
-[b] - Cloned species[/b] — livestock shared across your whole {FACTION_TITLE} by Cloning Labs.
+[b] - Stocked breeding pairs.[/b] Species you have personally delivered to that settlement and bred. These are local to the settlement that raised them.
+[b] - Basic farm animals.[/b] A common set available at every settlement from the start (configurable, and can be switched off).
+[b] - Cloned species.[/b] Livestock shared across your whole {FACTION_TITLE} by Cloning Labs.
 
-[b]Fisheries[/b] are a separate axis. A settlement on a coast, river, or lakeshore — in a biome where fish actually live — produces fish automatically; its catch is simply whatever those waters hold. Landlocked settlements have no fishery. (Fishing requires the Odyssey DLC.)
+[b]Fisheries[/b] are a separate axis. A settlement on a coast, river, or lakeshore — in a biome where fish actually live — produces fish automatically; its catch is simply whatever those waters hold. Landlocked settlements have no fishing. (Fishing requires the Odyssey DLC.)
 
-The [i]Livestock[/i] tab on a settlement's window lists every species it can raise and which source it came from, what each produces, and which fish — if any — its waters yield.</description>
+The Livestock tab on a settlement's window lists every species it can raise and which source it came from, what each produces, and which fish its waters yield.</description>
         <category>CodexCat_AnimalHusbandry</category>
         <displayOrder>0</displayOrder>
         <iconPath>UI/Banners/Banner-HerdsFisheries</iconPath>
@@ -42,11 +42,11 @@ The [i]Livestock[/i] tab on a settlement's window lists every species it can rai
     <FactionColonies.CodexEntryDef>
         <defName>Codex_AH_Registering</defName>
         <label>Stocking Breeding Pairs</label>
-        <description>To teach a settlement a new species, bring it there yourself. Form a caravan carrying a breeding pair and travel to the settlement.
+        <description>To teach a settlement a new species, bring it there yourself. Form a caravan carrying a an animal and travel to the settlement.
 
-A breeding pair is [b]one male and one female[/b]. Animals with no sex instead need any two individuals. A caravan only offers a species for stocking when it can't already be raised there and you are carrying a complete pair.
+A breeding pair is [b]one male and one female[/b]. Animals with no sex instead need any two individuals. You can provide animals one sex at a time; you don't need to stock both sides of the breeding pair simultaneously. But until the breeding pair requirement is met, you will not be able to produce that animal's goods.
 
-At the settlement, use the [i]Stock Animals[/i] caravan command — also available by right-clicking the settlement — to choose which species to stock. The pair stays behind to found the herd, and that species is raised there from then on.</description>
+At the settlement, use the [i]Stock Animals[/i] caravan command — also available by right-clicking the settlement — to choose which species to stock.</description>
         <category>CodexCat_AnimalHusbandry</category>
         <displayOrder>10</displayOrder>
         <seeAlso>
@@ -73,7 +73,7 @@ Which species count as "basic", and whether the feature is on at all, are set in
         <label>The Cloning Lab</label>
         <description>The [b]Cloning Lab[/b] pools livestock across your whole {FACTION_TITLE}. Every species stocked at a settlement that has a Cloning Lab becomes available to [i]all[/i] of your settlements.
 
-Build one at a well-stocked settlement to spread its herd empire-wide; the more species that settlement has stocked, the more every other settlement can raise. It is a higher-tech (Spacer) building, so it arrives as a late-game way to stop managing breeding pairs settlement by settlement and run your livestock from a single hub.</description>
+Build one at a well-stocked settlement to spread its herd empire-wide; the more species that settlement has stocked, the more every other settlement can raise. It is a Spacer-tech building, so it arrives as a late-game way to stop managing breeding pairs settlement by settlement and run your livestock from a single hub.</description>
         <category>CodexCat_AnimalHusbandry</category>
         <displayOrder>30</displayOrder>
         <seeAlso>
@@ -95,11 +95,11 @@ What it can catch depends on the kind of water its tile touches and the fish its
 
 A settlement on both salt and fresh water draws from both. A landlocked tile, or a biome with no fish of its own, has no fishery at all.
 
-Fish are an axis of their own, separate from your herds: a water-adjacent settlement yields its catch even with no livestock stocked. Land animal products still need their breeding pairs — the two systems do not substitute for each other.
+Fish are an axis of their own, separate from your herds: a water-adjacent settlement yields animal resource production even with no land-bound livestock. Land animal products still need their breeding pairs — the two systems do not substitute for each other.
 
-This is an Odyssey feature. It can be switched off in the mod settings — turn off [i]restrict fish to water-adjacent settlements[/i] to lift the location requirement, after which fish are treated like any other animal product your settlements raise.
+This is an Odyssey feature. It can be switched off in the mod settings; turn off [i]restrict fish to water-adjacent settlements[/i] to lift the location requirement, after which every fish will be available everywhere.
 
-A settlement's [i]Livestock[/i] tab shows what its waters offer, or tells you the tile is landlocked.</description>
+A settlement's [i]Livestock[/i] tab shows what its waters offer, or if the tile is landlocked.</description>
         <category>CodexCat_AnimalHusbandry</category>
         <displayOrder>40</displayOrder>
         <seeAlso>
