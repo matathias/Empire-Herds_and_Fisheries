@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	<FactionColonies.PatchNoteDef ParentName="AHPatchBase">
+		<defName>AH_0_2_0</defName>
+		<label>New Features!</label>
+		<description>Expands the scope of the mod and adds more levers to change how it plays, as well as a couple of bugfixes.</description>
+		<releaseDate>2026-06-17</releaseDate>
+		<patchNoteType>Major</patchNoteType>
+		<patchNoteLines>
+		<li>You can now send animals to settlements one at a time, instead of having to drop off a breeding pair together</li>
+		<li>Animals can be sent to settlements by transport pod</li>
+		<li>Fish integration: with Odyssey active, settlements will have access to fish depending on their biome and water access</li>
+		<li>Added Codex entries</li>
+		<li>Renamed mod (Pens &amp; Pastures -&gt; Herds &amp; Fisheries)</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
+</Defs>
