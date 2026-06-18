@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!--
-    Pens & Pastures - Codex Entry Definitions
+    Herds & Fisheries - Codex Entry Definitions
 
     One CodexEntryDef per documented mechanic. Descriptions are deliberately
     qualitative: they describe how the system behaves, not specific balance
@@ -17,21 +17,24 @@
     <FactionColonies.CodexEntryDef>
         <defName>Codex_AH_Overview</defName>
         <label>Raising Livestock</label>
-        <description>With [b]Empire Refactored: Pens &amp; Pastures[/b], your settlements no longer conjure animals and animal goods out of nothing. The animals resource is now tied to the species a settlement can actually raise — if it can raise none, it produces no animal goods at all, no matter how many workers you assign.
+        <description>With [b]Empire Refactored: Herds &amp; Fisheries[/b], your settlements no longer conjure animals and animal goods out of nothing. The animals resource is now tied to the species a settlement can actually raise — if it can raise none, it produces no animal goods at all, no matter how many workers you assign.
 
-A settlement can draw on three sources of livestock:
+A settlement's [b]herds[/b] — its land livestock — can draw on three sources:
 
 [b] - Stocked breeding pairs[/b] — species you have personally delivered to that settlement and bred. These are local to the settlement that raised them.
 [b] - Basic farm animals[/b] — a common set available at every settlement from the start (configurable, and can be switched off).
 [b] - Cloned species[/b] — livestock shared across your whole {FACTION_TITLE} by Cloning Labs.
 
-The [i]Livestock[/i] tab on a settlement's window lists every species it can raise and which of these three sources it came from, along with what each animal produces.</description>
+[b]Fisheries[/b] are a separate axis. A settlement on a coast, river, or lakeshore — in a biome where fish actually live — produces fish automatically; its catch is simply whatever those waters hold. Landlocked settlements have no fishery. (Fishing requires the Odyssey DLC.)
+
+The [i]Livestock[/i] tab on a settlement's window lists every species it can raise and which source it came from, what each produces, and which fish — if any — its waters yield.</description>
         <category>CodexCat_AnimalHusbandry</category>
         <displayOrder>0</displayOrder>
-        <iconPath>UI/Banners/Banner-PenPastures</iconPath>
+        <iconPath>UI/Banners/Banner-HerdsFisheries</iconPath>
         <seeAlso>
             <li>Codex_AH_Registering</li>
             <li>Codex_AH_CloningLab</li>
+            <li>Codex_AH_Fisheries</li>
             <li>Codex_ResourceProduction</li>
         </seeAlso>
     </FactionColonies.CodexEntryDef>
@@ -77,6 +80,31 @@ Build one at a well-stocked settlement to spread its herd empire-wide; the more 
             <li>Codex_AH_Overview</li>
             <li>Codex_AH_Registering</li>
             <li>Codex_BuildingSlots</li>
+        </seeAlso>
+    </FactionColonies.CodexEntryDef>
+
+    <FactionColonies.CodexEntryDef>
+        <defName>Codex_AH_Fisheries</defName>
+        <label>Fisheries</label>
+        <description>Where herds must be stocked, [b]fisheries[/b] come from geography. A settlement whose tile touches open water can pull fish from it directly — no breeding pairs, nothing to deliver, no Cloning Lab. If the water is there and the biome has fish, the settlement fishes.
+
+What it can catch depends on the kind of water its tile touches and the fish its biome holds:
+
+[b] - Coastal settlements[/b] land their biome's [i]saltwater[/i] fish.
+[b] - River and lakeshore settlements[/b] land its [i]freshwater[/i] fish.
+
+A settlement on both salt and fresh water draws from both. A landlocked tile, or a biome with no fish of its own, has no fishery at all.
+
+Fish are an axis of their own, separate from your herds: a water-adjacent settlement yields its catch even with no livestock stocked. Land animal products still need their breeding pairs — the two systems do not substitute for each other.
+
+This is an Odyssey feature. It can be switched off in the mod settings — turn off [i]restrict fish to water-adjacent settlements[/i] to lift the location requirement, after which fish are treated like any other animal product your settlements raise.
+
+A settlement's [i]Livestock[/i] tab shows what its waters offer, or tells you the tile is landlocked.</description>
+        <category>CodexCat_AnimalHusbandry</category>
+        <displayOrder>40</displayOrder>
+        <seeAlso>
+            <li>Codex_AH_Overview</li>
+            <li>Codex_ResourceProduction</li>
         </seeAlso>
     </FactionColonies.CodexEntryDef>
 

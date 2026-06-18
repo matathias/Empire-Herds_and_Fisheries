@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!--
-    Pens & Pastures - Codex Category Definition
+    Herds & Fisheries - Codex Category Definition
 
     This CodexCategoryDef groups the submod's Codex entries in the in-game Empire
     Codex. Entries are auto-discovered from the DefDatabase and grouped by
@@ -17,12 +17,12 @@
 
     <FactionColonies.CodexCategoryDef>
         <defName>CodexCat_AnimalHusbandry</defName>
-        <label>Pens &amp; Pastures</label>
-        <description>Raising livestock in your settlements: stocking breeding pairs, basic farm animals, the Cloning Lab, and how all of it feeds animal production and tithes.</description>
+        <label>Herds &amp; Fisheries</label>
+        <description>Raising livestock and working fisheries in your settlements: stocking breeding pairs, basic farm animals, the Cloning Lab, water-fed fishing, and how all of it feeds animal production and tithes.</description>
         <color>(0.60, 0.45, 0.28)</color>
         <displayOrder>15</displayOrder>
         <modId>matathias.empire.animalhusbandry</modId>
-        <bannerPath>UI/Banners/Banner-PenPastures</bannerPath>
+        <bannerPath>UI/Banners/Banner-HerdsFisheries</bannerPath>
     </FactionColonies.CodexCategoryDef>
 
 </Defs>

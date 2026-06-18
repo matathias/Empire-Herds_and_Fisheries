@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ModMetaData>
 
-	<name>Empire Refactored: Pens &amp; Pastures</name>
+	<name>Empire Refactored: Herds &amp; Fisheries</name>
 	<author>Matathias</author>
 	<supportedVersions>
 		<li>1.6</li>
@@ -23,6 +23,6 @@
 
 	<modIconPath IgnoreIfNoMatchingField="True">UI/Icons/EmpireLogo</modIconPath>
 
-	<description>A submod for Empire Refactored that adds a breeding-pair requirement for animal production. Send animals to settlements via caravan to unlock their products. Basic farm animals are available by default (configurable). The Cloning Lab building shares stocked species empire-wide.</description>
+	<description>A submod for Empire Refactored that adds a breeding-pair requirement for land animal production, and a location requirement for fish production. Send animals to settlements via caravan to unlock their products. Basic farm animals are available by default (configurable). The Cloning Lab building shares stocked species empire-wide.</description>
 
 </ModMetaData>

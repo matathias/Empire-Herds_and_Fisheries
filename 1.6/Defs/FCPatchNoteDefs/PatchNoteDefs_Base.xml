@@ -2,7 +2,7 @@
 <Defs>
 	<FactionColonies.PatchNoteDef Name="AHPatchBase" Abstract="True">
 		<modId>matathias.empire.animalhusbandry</modId>
-		<bannerImagePath>UI/Banners/Banner-PenPastures</bannerImagePath>
+		<bannerImagePath>UI/Banners/Banner-HerdsFisheries</bannerImagePath>
 
 		<links>
 			<li>https://discord.gg/f3zFQqA</li>

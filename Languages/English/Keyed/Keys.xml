@@ -40,8 +40,8 @@
     <AH_NoAnimalsRegistered>No livestock - animal production disabled</AH_NoAnimalsRegistered>
 
     <!-- Settings -->
-    <AH_Title>Empire: Pens &amp; Pastures</AH_Title>
-    <AH_PatchTitle>Patch Notes: Pens &amp; Pastures</AH_PatchTitle>
+    <AH_Title>Empire: Herds &amp; Fisheries</AH_Title>
+    <AH_PatchTitle>Patch Notes: Herds &amp; Fisheries</AH_PatchTitle>
     <AH_OpenPatchNotes>Open Patch Notes</AH_OpenPatchNotes>
     <AH_BasicAnimalsEnabled>Basic farm animals available at all settlements</AH_BasicAnimalsEnabled>
     <AH_BasicAnimalsEnabledDesc>When enabled, basic farm animals (Chicken, Cow, Pig, Sheep, Goat) are available at all settlements without needing to send breeding pairs.</AH_BasicAnimalsEnabledDesc>
