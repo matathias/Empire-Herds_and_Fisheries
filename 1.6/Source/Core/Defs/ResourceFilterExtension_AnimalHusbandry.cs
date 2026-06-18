@@ -43,13 +43,19 @@ namespace FactionColonies.AnimalHusbandry
                 RemoveNonAllowedProducts(filter, allowed);
             }
 
-            // Orthogonal water gate: fish (a MeatRaw-derived category, kept above as an "unknown
-            // product") require water access regardless of breeding pairs. Remove them when the
-            // settlement is landlocked. Inert without Odyssey (Fish category is null then).
+            // Orthogonal water/biome gate: fish (a MeatRaw-derived category, kept above as "unknown
+            // products") are restricted to the species this settlement's biome offers for the water
+            // type(s) its tile touches, regardless of breeding pairs. Disallow the rest; an empty
+            // allowed set (landlocked / no-fish biome) removes them all. Inert without Odyssey.
             if (comp is object && ModsConfig.OdysseyActive && FCAHSettings.RestrictFishToWater
-                && !comp.HasWaterAccess() && ThingCategoryDefOf.Fish is object)
+                && ThingCategoryDefOf.Fish is object)
             {
-                filter.SetAllow(ThingCategoryDefOf.Fish, false);
+                HashSet<ThingDef> allowedFish = comp.GetAllowedFish();
+                foreach (ThingDef fish in ThingCategoryDefOf.Fish.DescendantThingDefs)
+                {
+                    if (!allowedFish.Contains(fish))
+                        filter.SetAllow(fish, false);
+                }
             }
         }
 

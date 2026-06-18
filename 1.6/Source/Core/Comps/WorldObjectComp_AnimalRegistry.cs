@@ -191,37 +191,69 @@ namespace FactionColonies.AnimalHusbandry
 
         // ── Water access (fish) ──
 
-        // Tile geography is static, so the coast/lake/river lookup is computed once and cached.
-        // Not serialized: it's deterministic from the tile, so it's recomputed lazily after load.
-        private bool? hasWaterAccessCached;
+        // Geography + biome are static per tile, so the catchable-fish set is computed once and
+        // cached. Not serialized: it's deterministic from the tile, so it's recomputed lazily after
+        // load. The "tile not ready" case returns empty without caching, so a later call rebuilds.
+        private static readonly HashSet<ThingDef> EmptyFish = new HashSet<ThingDef>();
+        private HashSet<ThingDef> allowedFishCached;
+        private bool allowedFishBuilt;
 
-        /// <summary>True if this settlement's tile is on a coast, lakeshore, or river.</summary>
-        public bool HasWaterAccess()
+        /// <summary>
+        /// Fish species this settlement can produce: the biome's fish for the water type(s) its
+        /// tile touches (coast -> saltwater lists; river/lakeshore -> freshwater lists; union if
+        /// both). Empty when landlocked, when the biome defines no fish, or without Odyssey.
+        /// </summary>
+        public HashSet<ThingDef> GetAllowedFish()
         {
-            if (hasWaterAccessCached.HasValue)
-                return hasWaterAccessCached.Value;
-
-            PlanetTile pt = Settlement is object ? Settlement.Tile : PlanetTile.Invalid;
-            if (!pt.Valid) return false;   // world/settlement not ready yet; recompute later
-            Tile t = pt.Tile;
-            if (t is null) return false;
-
-            bool water = t.IsCoastal                                // coast (ocean-adjacent)
-                || Find.World.LakeDirectionAt(pt) != Rot4.Invalid;  // lakeshore
-            if (!water)
+            if (allowedFishBuilt) return allowedFishCached;
+            if (!ModsConfig.OdysseyActive)
             {
-                SurfaceTile st = t as SurfaceTile;                  // river
-                water = st is object && st.Rivers is object && st.Rivers.Count > 0;
+                allowedFishCached = EmptyFish;
+                allowedFishBuilt = true;
+                return EmptyFish;
             }
 
-            hasWaterAccessCached = water;
-            return water;
+            PlanetTile pt = Settlement is object ? Settlement.Tile : PlanetTile.Invalid;
+            if (!pt.Valid) return EmptyFish;   // world/settlement not ready yet; recompute later
+            Tile t = pt.Tile;
+            if (t is null) return EmptyFish;
+
+            BiomeFishTypes ft = t.PrimaryBiome?.fishTypes;
+            HashSet<ThingDef> set = new HashSet<ThingDef>();
+            if (ft is object)
+            {
+                bool saltwater = t.IsCoastal;                           // coast (ocean-adjacent)
+                SurfaceTile st = t as SurfaceTile;
+                bool freshwater = Find.World.LakeDirectionAt(pt) != Rot4.Invalid  // lakeshore
+                    || (st is object && st.Rivers is object && st.Rivers.Count > 0); // river
+                if (freshwater)
+                {
+                    AddFish(set, ft.freshwater_Common);
+                    AddFish(set, ft.freshwater_Uncommon);
+                }
+                if (saltwater)
+                {
+                    AddFish(set, ft.saltwater_Common);
+                    AddFish(set, ft.saltwater_Uncommon);
+                }
+            }
+
+            allowedFishCached = set;
+            allowedFishBuilt = true;
+            return set;
         }
 
-        // Fish (Odyssey) are an axis orthogonal to breeding pairs: gated purely by water access.
+        private static void AddFish(HashSet<ThingDef> set, List<FishChance> chances)
+        {
+            if (chances is null) return;
+            foreach (FishChance fc in chances)
+                if (fc.fishDef is object) set.Add(fc.fishDef);
+        }
+
+        // Fish (Odyssey) are an axis orthogonal to breeding pairs: gated purely by water + biome.
         public bool CanProduceFishFromWater()
         {
-            return ModsConfig.OdysseyActive && FCAHSettings.RestrictFishToWater && HasWaterAccess();
+            return FCAHSettings.RestrictFishToWater && GetAllowedFish().Count > 0;
         }
 
         // ── IResourceProductionModifier ──
@@ -397,16 +429,27 @@ namespace FactionColonies.AnimalHusbandry
 
             float offsetY = boundingBox.y + headerHeight;
 
-            // Fish water-access status (Odyssey + setting): geography only, independent of pairs.
+            // Fish status (Odyssey + setting): which species this tile's biome + water type offers.
             if (ModsConfig.OdysseyActive && FCAHSettings.RestrictFishToWater)
             {
                 float fishLineHeight = 24f;
                 Rect fishRect = new Rect(boundingBox.x, offsetY, boundingBox.width, fishLineHeight);
-                bool water = HasWaterAccess();
+                HashSet<ThingDef> fish = GetAllowedFish();
                 Color prev = GUI.color;
-                if (!water) GUI.color = new Color(0.7f, 0.7f, 0.7f);
+                string label;
+                if (fish.Count > 0)
+                {
+                    string list = string.Join(", ", fish.Select(f => f.LabelCap.ToString()));
+                    label = "AH_FishAvailable".Translate(list);
+                    TooltipHandler.TipRegion(fishRect, label);
+                }
+                else
+                {
+                    GUI.color = new Color(0.7f, 0.7f, 0.7f);
+                    label = "AH_FishUnavailable".Translate();
+                }
                 Text.Anchor = TextAnchor.MiddleLeft;
-                Widgets.Label(fishRect, (water ? "AH_FishAvailable" : "AH_FishUnavailable").Translate());
+                Widgets.Label(fishRect, Text.ClampTextWithEllipsis(fishRect, label));
                 Text.Anchor = TextAnchor.UpperLeft;
                 GUI.color = prev;
                 offsetY += fishLineHeight;
