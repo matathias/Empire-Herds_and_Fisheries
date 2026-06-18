@@ -401,6 +401,8 @@ namespace FactionColonies.AnimalHusbandry
             return "AH_LivestockTab".Translate();
         }
 
+        public bool ShouldShowOverviewTab(WorldSettlementFC settlement) => true;
+
         private static readonly Color InProgressColor = new Color(0.9f, 0.8f, 0.45f);
 
         public void DrawOverviewTab(Rect boundingBox)
