@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	<FactionColonies.PatchNoteDef ParentName="AHPatchBase">
+		<defName>AH_1_0_0</defName>
+		<label>Release</label>
+		<description>Just a version bump for the official Steam Workshop release.</description>
+		<releaseDate>2026-06-26</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Release!</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
+</Defs>
