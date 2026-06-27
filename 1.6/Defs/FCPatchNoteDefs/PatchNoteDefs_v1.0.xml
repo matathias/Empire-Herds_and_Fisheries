@@ -13,4 +13,18 @@
 		<li>Matathias</li>
 		</authors>
 	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="AHPatchBase">
+		<defName>AH_1_0_1</defName>
+		<label>Auto-opening Window Bugfix</label>
+		<description>Fixes a bug where the &apos;stock animal&apos; dialog would open as soon as a caravan with animals left the player colony.</description>
+		<releaseDate>2026-06-27</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Bugfix: &apos;stock animals&apos; dialog would appear as soon as a player caravan with animals left their colony</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
 </Defs>

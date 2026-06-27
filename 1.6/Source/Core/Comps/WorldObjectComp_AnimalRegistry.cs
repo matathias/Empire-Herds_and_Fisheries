@@ -371,19 +371,6 @@ namespace FactionColonies.AnimalHusbandry
             };
         }
 
-        public override IEnumerable<FloatMenuOption> GetFloatMenuOptions(Caravan caravan)
-        {
-            List<ThingDef> contributable = GetContributableSpecies(caravan);
-            if (contributable.Count == 0) yield break;
-
-            yield return new FloatMenuOption(
-                "AH_RegisterAnimalsAt".Translate(Settlement.Name),
-                delegate
-                {
-                    Find.WindowStack.Add(new Dialog_RegisterAnimals(caravan, this, contributable));
-                });
-        }
-
         // ── ISettlementWindowOverview ──
 
         public void PreOpenWindow(WorldSettlementFC s)
