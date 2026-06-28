@@ -23,6 +23,10 @@
 		</li>
 	</modDependencies>
 
+	<loadAfter>
+		<li>Matathias.Empire</li>
+	</loadAfter>
+
 	<modIconPath IgnoreIfNoMatchingField="True">UI/Icons/EmpireLogo</modIconPath>
 
 	<description>Did you know that rare and exotic animals just sprout from the ground? No? Yeah, me neither. Yet in Empire Refactored, with just a bit of patience, you can get your own thrumbos for free from high-animal-production settlements.
