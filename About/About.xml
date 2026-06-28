@@ -18,6 +18,8 @@
 		<li>
 			<packageId>Matathias.Empire</packageId>
 			<displayName>Empire</displayName>
+			<steamWorkshopUrl>steam://url/CommunityFilePage/3701480464</steamWorkshopUrl>
+			<downloadUrl>https://github.com/matathias/Empire-1_6-Continued/releases/latest</downloadUrl>
 		</li>
 	</modDependencies>
 
