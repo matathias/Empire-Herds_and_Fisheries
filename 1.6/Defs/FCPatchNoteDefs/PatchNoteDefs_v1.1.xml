@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	<FactionColonies.PatchNoteDef ParentName="AHPatchBase">
+		<defName>AH_1_1_0</defName>
+		<label>Update for Empire Refactored 1.6</label>
+		<description>Recompile against Empire Refactored 1.6, instead of 1.5.</description>
+		<releaseDate>2026-07-09</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Recompile</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
+</Defs>
