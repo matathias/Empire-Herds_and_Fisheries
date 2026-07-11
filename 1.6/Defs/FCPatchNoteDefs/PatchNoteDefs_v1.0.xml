@@ -27,4 +27,18 @@
 		<li>Matathias</li>
 		</authors>
 	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="AHPatchBase">
+		<defName>AH_1_0_2</defName>
+		<label>300 Phantom Tortoises update</label>
+		<description>A tandem update with Empire Refactored to address an issue where 300 tortoises suddenly spawned on a player&apos;s map.</description>
+		<releaseDate>2026-07-11</releaseDate>
+		<patchNoteType>Patch</patchNoteType>
+		<patchNoteLines>
+		<li>Block fertilized eggs from being produced by Empire settlements or trader caravans. This should prevent the possibility of stacks of fertilized eggs getting dropped on the map and hatching into a billion lions</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
 </Defs>

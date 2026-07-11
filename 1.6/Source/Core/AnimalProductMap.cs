@@ -13,6 +13,10 @@ namespace FactionColonies.AnimalHusbandry
     {
         private static Dictionary<ThingDef, HashSet<ThingDef>> animalToProducts;
         private static Dictionary<ThingDef, HashSet<ThingDef>> productToAnimals;
+        // Fertilized eggs of every animal. Never treated as a deliverable product: they carry
+        // CompHatcher and a delivered stack hatches into a herd on the player's map (one pawn per
+        // egg). Blocked wholesale in IsProductAllowed; unfertilized (food) eggs stay as products.
+        private static HashSet<ThingDef> fertilizedEggs;
         // Products already warned about (no associated animal), so the block is logged once each.
         private static readonly HashSet<ThingDef> warnedUnmappedProducts = new HashSet<ThingDef>();
         private static bool built = false;
@@ -27,6 +31,7 @@ namespace FactionColonies.AnimalHusbandry
         {
             animalToProducts = null;
             productToAnimals = null;
+            fertilizedEggs = null;
             warnedUnmappedProducts.Clear();
             built = false;
         }
@@ -35,6 +40,7 @@ namespace FactionColonies.AnimalHusbandry
         {
             animalToProducts = new Dictionary<ThingDef, HashSet<ThingDef>>();
             productToAnimals = new Dictionary<ThingDef, HashSet<ThingDef>>();
+            fertilizedEggs = new HashSet<ThingDef>();
 
             foreach (PawnKindDef kind in FactionCache.AllAnimalKindDefs)
             {
@@ -60,8 +66,10 @@ namespace FactionColonies.AnimalHusbandry
                 CompProperties_EggLayer eggLayer = race.GetCompProperties<CompProperties_EggLayer>();
                 if (eggLayer?.eggUnfertilizedDef is object)
                     AddMapping(race, eggLayer.eggUnfertilizedDef, products);
+                // Fertilized eggs are NOT mapped as a product — they hatch into live animals, so a
+                // delivered stack becomes a herd. Tracked separately and blocked in IsProductAllowed.
                 if (eggLayer?.eggFertilizedDef is object)
-                    AddMapping(race, eggLayer.eggFertilizedDef, products);
+                    fertilizedEggs.Add(eggLayer.eggFertilizedDef);
 
                 // Insect jelly has no producing comp (vanilla Hives spawn it), so associate it with any
                 // insect race so insect-stocked settlements produce it and non-insect settlements don't.
@@ -98,6 +106,11 @@ namespace FactionColonies.AnimalHusbandry
         public static bool IsProductAllowed(ThingDef product, HashSet<ThingDef> allowedAnimals)
         {
             EnsureBuilt();
+
+            // Fertilized eggs hatch into live animals; never allow one as a deliverable/tithe
+            // product regardless of which animal produces it. Unfertilized (food) eggs are unaffected.
+            if (fertilizedEggs.Contains(product)) return false;
+
             HashSet<ThingDef> producers;
             if (!productToAnimals.TryGetValue(product, out producers))
             {
