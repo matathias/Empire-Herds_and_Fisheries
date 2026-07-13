@@ -42,11 +42,11 @@ The Livestock tab on a settlement's window lists every species it can raise and 
     <FactionColonies.CodexEntryDef>
         <defName>Codex_AH_Registering</defName>
         <label>Stocking Breeding Pairs</label>
-        <description>To teach a settlement a new species, bring it there yourself. Form a caravan carrying a an animal and travel to the settlement.
+        <description>To teach a settlement a new species, bring it there yourself. Form a caravan carrying an animal and travel to the settlement.
 
 A breeding pair is [b]one male and one female[/b]. Animals with no sex instead need any two individuals. You can provide animals one sex at a time; you don't need to stock both sides of the breeding pair simultaneously. But until the breeding pair requirement is met, you will not be able to produce that animal's goods.
 
-At the settlement, use the [i]Stock Animals[/i] caravan command — also available by right-clicking the settlement — to choose which species to stock.</description>
+At the settlement, use the [i]Stock Animals[/i] caravan command to choose which species to stock.</description>
         <category>CodexCat_AnimalHusbandry</category>
         <displayOrder>10</displayOrder>
         <seeAlso>

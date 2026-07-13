@@ -3,7 +3,6 @@
     <!-- Gizmo / Float menu -->
     <AH_RegisterAnimals>Stock Animals</AH_RegisterAnimals>
     <AH_RegisterAnimalsDesc>Send animals from this caravan to {0}. Production begins once both a male and a female (or two of a genderless species) have arrived.</AH_RegisterAnimalsDesc>
-    <AH_RegisterAnimalsAt>Stock {0} with animals</AH_RegisterAnimalsAt>
 
     <!-- Transport-pod arrival -->
     <AH_StockAnimalsAt>Stock animals at {0}</AH_StockAnimalsAt>

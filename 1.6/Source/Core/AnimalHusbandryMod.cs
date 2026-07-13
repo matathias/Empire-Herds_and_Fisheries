@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using System.Reflection;
 using FactionColonies;
-using HarmonyLib;
 using UnityEngine;
 using Verse;
 
@@ -182,8 +180,6 @@ namespace FactionColonies.AnimalHusbandry
 
         static AnimalHusbandryStartup()
         {
-            new Harmony("Matathias.Empire.AnimalHusbandry").PatchAll(Assembly.GetExecutingAssembly());
-
             // Gate the base mod's unit-designer animal/mount pickers to stocked animals.
             EmpireRegistry.Register(MercAnimalStockFilter.Instance);
             EmpireRegistry.Register(_lifecycleHandler);

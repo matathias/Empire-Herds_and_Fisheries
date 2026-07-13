@@ -88,9 +88,9 @@ namespace FactionColonies.AnimalHusbandry
                     }
                     while (pawn.MarketValue + totalValue > maxBudget && attempts < MAX_ATTEMPTS_FEW);
 
-                    if (attempts >= MAX_ATTEMPTS_FEW)
+                    if (pawn.MarketValue + totalValue > maxBudget)
                     {
-                        if (pawn is object) pawn.Destroy();
+                        pawn.Destroy();
                     }
                     else
                     {

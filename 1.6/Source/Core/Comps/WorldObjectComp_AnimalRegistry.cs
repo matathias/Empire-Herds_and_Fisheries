@@ -97,7 +97,7 @@ namespace FactionColonies.AnimalHusbandry
         /// </summary>
         public void AddIndividual(ThingDef species, Gender gender)
         {
-            if (species is null || species.race is null || !species.race.Animal
+            if (species?.race is null || !species.race.Animal
                 || !AnimalProductMap.IsKnownAnimal(species)) return;   // exclude dryads/blacklisted races
 
             AnimalStockEntry entry = FindEntry(species);
@@ -202,6 +202,20 @@ namespace FactionColonies.AnimalHusbandry
             if (pawn is null) return;
             ThingDef species = pawn.def;
             Gender gender = pawn.gender;
+
+            // Never destroy an animal AddIndividual would reject (non-animal / excluded species /
+            // species already available / this sex already stocked) - that would be a pawn lost for
+            // zero credit. Both current callers pre-check, so this only guards future callers; mirror
+            // the AcceptsPawn acceptance contract exactly.
+            if (species?.race is null || !species.race.Animal
+                || !AnimalProductMap.IsKnownAnimal(species)
+                || GetAllowedAnimals().Contains(species)
+                || !StillNeeds(species, gender))
+            {
+                LogAH.Warning($"StockIndividual skipped {species?.defName} at {Settlement?.Name}: not needed");
+                return;
+            }
+
             RouteCarriedInventory(pawn);   // don't destroy cargo along with the pawn
             if (Find.WorldPawns is object && Find.WorldPawns.Contains(pawn))
                 Find.WorldPawns.RemovePawn(pawn);
@@ -484,7 +498,7 @@ namespace FactionColonies.AnimalHusbandry
                     label = "AH_FishUnavailable".Translate();
                 }
                 Text.Anchor = TextAnchor.MiddleLeft;
-                Widgets.Label(fishRect, Text.ClampTextWithEllipsis(fishRect, label));
+                Widgets.Label(fishRect, TextUtil.ClampWithEllipsis(fishRect, label));
                 Text.Anchor = TextAnchor.UpperLeft;
                 GUI.color = prev;
                 offsetY += fishLineHeight;
