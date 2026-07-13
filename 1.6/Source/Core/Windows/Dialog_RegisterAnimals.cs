@@ -257,6 +257,10 @@ namespace FactionColonies.AnimalHusbandry
         // (records the species/sex and destroys the pawn). Same path the transport-pod arrival uses.
         private void ConsumeAndRecord(Pawn pawn)
         {
+            // Keep the animal's cargo with the caravan when another member can carry it (vanilla parity:
+            // Settlement_TraderTracker does the same before selling a pack animal). Anything no remaining
+            // member can take stays on the pawn and is rerouted home by StockIndividual, never destroyed.
+            CaravanInventoryUtility.MoveAllInventoryToSomeoneElse(pawn, caravan.PawnsListForReading);
             caravan.RemovePawn(pawn);
             comp.StockIndividual(pawn);
         }

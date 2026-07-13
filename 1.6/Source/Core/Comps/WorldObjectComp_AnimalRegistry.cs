@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using FactionColonies;
+using FactionColonies.util;
 using RimWorld;
 using RimWorld.Planet;
 using UnityEngine;
@@ -200,11 +200,32 @@ namespace FactionColonies.AnimalHusbandry
             if (pawn is null) return;
             ThingDef species = pawn.def;
             Gender gender = pawn.gender;
+            RouteCarriedInventory(pawn);   // don't destroy cargo along with the pawn
             if (Find.WorldPawns is object && Find.WorldPawns.Contains(pawn))
                 Find.WorldPawns.RemovePawn(pawn);
             if (!pawn.Destroyed) pawn.Destroy();
             AddIndividual(species, gender);
             LogAH.MessageForce($"Stocked 1 {gender} {species.defName} at {Settlement.Name}");
+        }
+
+        // The registry destroys the pawn, which would DestroyAll its carried
+        // inventory. Anything still on it - a pod-arrived animal's cargo, or caravan goods no remaining
+        // member could take - is routed home through the Empire delivery pipeline instead of being lost.
+        private void RouteCarriedInventory(Pawn pawn)
+        {
+            if (pawn?.inventory is null) return;
+            ThingOwner container = pawn.inventory.innerContainer;
+            if (container is null || container.Count == 0) return;
+
+            List<Thing> carried = new List<Thing>();
+            for (int i = container.Count - 1; i >= 0; i--)
+            {
+                Thing t = container[i];
+                container.Remove(t);   // detach without destroying (mirrors RouteLeftovers)
+                carried.Add(t);
+            }
+            if (carried.Count > 0)
+                DeliveryEvent.CreateDeliveryEvent(carried, Settlement.Tile);
         }
 
         // ── Water access (fish) ──
