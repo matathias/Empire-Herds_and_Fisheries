@@ -8,6 +8,16 @@
             <li Class="FactionColonies.AnimalHusbandry.WorldObjectCompProperties_AnimalRegistry" />
         </value>
     </Operation>
+	
+    <Operation Class="PatchOperationConditional" MayRequire="Ludeon.RimWorld.Odyssey">
+        <xpath>/Defs/FactionColonies.WorldSettlementDef[defName="WorldSettlementDef_Orbital"]/comps</xpath>
+        <match Class="PatchOperationAdd">
+            <xpath>/Defs/FactionColonies.WorldSettlementDef[defName="WorldSettlementDef_Orbital"]/comps</xpath>
+            <value>
+                <li Class="FactionColonies.AnimalHusbandry.WorldObjectCompProperties_AnimalRegistry" />
+            </value>
+        </match>
+    </Operation>
 
     <!-- Re-class the base animal filter extension to our filtered subclass.
          AttributeSet (not Replace) so the base's child config - notably
