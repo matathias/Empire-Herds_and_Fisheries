@@ -176,12 +176,17 @@ namespace FactionColonies.AnimalHusbandry
     [StaticConstructorOnStartup]
     public static class AnimalHusbandryStartup
     {
+        // Invalidates StockedAnimalCache when a settlement is removed (the merc picker would otherwise
+        // keep offering a destroyed settlement's species until reload).
+        private static readonly AnimalHusbandryLifecycleHandler _lifecycleHandler = new AnimalHusbandryLifecycleHandler();
+
         static AnimalHusbandryStartup()
         {
             new Harmony("Matathias.Empire.AnimalHusbandry").PatchAll(Assembly.GetExecutingAssembly());
 
             // Gate the base mod's unit-designer animal/mount pickers to stocked animals.
             EmpireRegistry.Register(MercAnimalStockFilter.Instance);
+            EmpireRegistry.Register(_lifecycleHandler);
 
             EmpireCacheUtil.RegisterCacheInvalidator("AnimalHusbandry", () =>
             {
@@ -190,6 +195,7 @@ namespace FactionColonies.AnimalHusbandry
                 StockedAnimalCache.Clear();
                 // InvalidateAll runs EmpireRegistry.ClearAll() before these callbacks, so re-register.
                 EmpireRegistry.Register(MercAnimalStockFilter.Instance);
+                EmpireRegistry.Register(_lifecycleHandler);
             });
             AnimalProductMap.EnsureBuilt();
             FCAHSettings.InitializeBasicAnimals();

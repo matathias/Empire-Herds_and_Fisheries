@@ -97,7 +97,8 @@ namespace FactionColonies.AnimalHusbandry
         /// </summary>
         public void AddIndividual(ThingDef species, Gender gender)
         {
-            if (species is null || species.race is null || !species.race.Animal) return;
+            if (species is null || species.race is null || !species.race.Animal
+                || !AnimalProductMap.IsKnownAnimal(species)) return;   // exclude dryads/blacklisted races
 
             AnimalStockEntry entry = FindEntry(species);
             bool existed = entry is object;
@@ -148,6 +149,7 @@ namespace FactionColonies.AnimalHusbandry
         public override bool AcceptsPawn(Pawn pawn)
         {
             if (pawn?.def?.race is null || !pawn.def.race.Animal) return false;
+            if (!AnimalProductMap.IsKnownAnimal(pawn.def)) return false;   // exclude dryads/blacklisted races
             if (GetAllowedAnimals().Contains(pawn.def)) return false;
             return StillNeeds(pawn.def, pawn.gender);
         }
@@ -289,10 +291,14 @@ namespace FactionColonies.AnimalHusbandry
                 if (fc.fishDef is object) set.Add(fc.fishDef);
         }
 
-        // Fish (Odyssey) are an axis orthogonal to breeding pairs: gated purely by water + biome.
-        public bool CanProduceFishFromWater()
+        // Fish (Odyssey) are an axis orthogonal to breeding pairs. With RestrictFishToWater ON they need
+        // water/biome access; with it OFF the setting's whole point is fish at ANY settlement, so production
+        // is enabled empire-wide. Without Odyssey there are no fish either way.
+        public bool CanProduceFish()
         {
-            return FCAHSettings.RestrictFishToWater && GetAllowedFish().Count > 0;
+            if (!ModsConfig.OdysseyActive) return false;
+            if (!FCAHSettings.RestrictFishToWater) return true;   // unrestricted: fish at any settlement
+            return GetAllowedFish().Count > 0;                    // restricted: needs water access
         }
 
         // ── IResourceProductionModifier ──
@@ -306,7 +312,7 @@ namespace FactionColonies.AnimalHusbandry
         {
             if (resource.def != ResourceTypeDefOf.RTD_Animals) return 1;
             if (HasAnyAnimals()) return 1;
-            if (CanProduceFishFromWater()) return 1;   // water enables fish with no breeding pairs
+            if (CanProduceFish()) return 1;   // fish enable production with no breeding pairs
             return 0;
         }
 
@@ -319,7 +325,7 @@ namespace FactionColonies.AnimalHusbandry
         {
             if (resource.def != ResourceTypeDefOf.RTD_Animals) return null;
             if (HasAnyAnimals()) return null;
-            if (CanProduceFishFromWater()) return null;   // producing fish from water, not zero
+            if (CanProduceFish()) return null;   // producing fish, not zero
             return "AH_NoAnimalsRegistered".Translate();
         }
 
@@ -359,6 +365,7 @@ namespace FactionColonies.AnimalHusbandry
             {
                 if (pawn.RaceProps is null || !pawn.RaceProps.Animal) continue;
                 ThingDef race = pawn.def;
+                if (!AnimalProductMap.IsKnownAnimal(race)) continue;   // exclude dryads/blacklisted races
                 if (available.Contains(race)) continue;
 
                 if (!bySpecies.TryGetValue(race, out List<Pawn> list))
