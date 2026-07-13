@@ -112,7 +112,24 @@ namespace FactionColonies.AnimalHusbandry
                 CloningCache.Invalidate();
                 StockedAnimalCache.Invalidate();
                 Settlement?.InvalidateResourceCaches();
+                RefreshAnimalTitheFilter(species);
             }
+        }
+
+        // A newly completed breeding pair must become tithe-able. InvalidateResourceCaches only dirties
+        // production caches; the tithe-picker list is otherwise rebuilt only by the player-facing "Enable
+        // All". Dirty the picker cache so the new species (and its products) show up as selectable in both
+        // the random and manual tithe pickers. We deliberately do NOT auto-allow it in randomTitheFilter:
+        // the player opts in, so a curated random-tithe filter isn't overwritten every time a pair is stocked.
+        private void RefreshAnimalTitheFilter(ThingDef species)
+        {
+            if (!AnimalProductMap.IsKnownAnimal(species)) return;   // excluded species are never tithe-able anyway
+            WorldSettlementFC settlement = Settlement;
+            if (settlement is null) return;
+            ResourceFC animals = settlement.GetResource(ResourceTypeDefOf.RTD_Animals);
+            if (animals is null) return;
+
+            animals.SetDirtyRandomTitheCache();                    // rebuilds the tithe-picker list on next access
         }
 
         // True if the settlement still needs this species/gender combo (i.e. the add would advance).
