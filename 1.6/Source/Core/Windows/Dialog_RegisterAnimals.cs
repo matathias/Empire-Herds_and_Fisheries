@@ -81,7 +81,7 @@ namespace FactionColonies.AnimalHusbandry
             Text.Font = GameFont.Small;
 
             float y = titleRect.yMax + 8f;
-            Rect descRect = new Rect(inRect.x, y, inRect.width, 44f);
+            Rect descRect = new Rect(inRect.x, y, inRect.width, 64f);
             Widgets.Label(descRect, "AH_RegisterDesc".Translate());
             y = descRect.yMax + 8f;
 
