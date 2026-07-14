@@ -40,6 +40,7 @@
 
     <!-- Settings -->
     <AH_Title>Empire: Herds &amp; Fisheries</AH_Title>
+    <AH_ModVersion>Herds &amp; Fisheries Version: {0}</AH_ModVersion>
     <AH_PatchTitle>Patch Notes: Herds &amp; Fisheries</AH_PatchTitle>
     <AH_OpenPatchNotes>Open Patch Notes</AH_OpenPatchNotes>
     <AH_BasicAnimalsEnabled>Basic farm animals available at all settlements</AH_BasicAnimalsEnabled>

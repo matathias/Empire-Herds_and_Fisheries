@@ -100,6 +100,9 @@ namespace FactionColonies.AnimalHusbandry
             Listing_Standard ls = new Listing_Standard();
             ls.Begin(mainRect);
 
+            ls.Label("AH_ModVersion".Translate(AnimalHusbandryMod.GetModVersion()));
+            ls.Gap(10f);
+
             ls.CheckboxLabeled("AH_DebugLogging".Translate(), ref printDebug);
             ls.GapLine();
 
@@ -216,6 +219,13 @@ namespace FactionColonies.AnimalHusbandry
             {
                 LogAH.MessageForce($"v{modVersion}");
             }
+        }
+
+        public static string GetModVersion()
+        {
+            var mod = LoadedModManager.GetMod<AnimalHusbandryMod>();
+            string version = mod?.Content?.ModMetaData?.ModVersion;
+            return version.NullOrEmpty() ? "Unknown" : version;
         }
 
         public override string SettingsCategory() => "AH_Title".Translate();
