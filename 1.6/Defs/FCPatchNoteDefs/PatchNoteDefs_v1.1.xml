@@ -13,4 +13,23 @@
 		<li>Matathias</li>
 		</authors>
 	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="AHPatchBase">
+		<defName>AH_1_1_1</defName>
+		<label>Various Fixes</label>
+		<description>Various fixes and minor changes.</description>
+		<releaseDate>2026-07-13</releaseDate>
+		<patchNoteType>Patch</patchNoteType>
+		<patchNoteLines>
+		<li>Bugfix: after registering a pair of breeding animals, they wouldn&apos;t actually appear in the tithes lists</li>
+		<li>UI cleanup</li>
+		<li>Orbital settlements now track animals too</li>
+		<li>When an animal is registered, the items it was carrying are no longer destroyed</li>
+		<li>When the &quot;restrict fish to water&quot; setting is disabled, all settlements will have access to fish</li>
+		<li>Add mod version to the mod settings</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
 </Defs>
