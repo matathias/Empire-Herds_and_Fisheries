@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	<FactionColonies.PatchNoteDef ParentName="AHPatchBase">
+		<defName>AH_1_0_0</defName>
+		<label>Release</label>
+		<description>Just a version bump for the official Steam Workshop release.</description>
+		<releaseDate>2026-06-26</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Release!</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="AHPatchBase">
+		<defName>AH_1_0_1</defName>
+		<label>Auto-opening Window Bugfix</label>
+		<description>Fixes a bug where the &apos;stock animal&apos; dialog would open as soon as a caravan with animals left the player colony.</description>
+		<releaseDate>2026-06-27</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Bugfix: &apos;stock animals&apos; dialog would appear as soon as a player caravan with animals left their colony</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="AHPatchBase">
+		<defName>AH_1_0_2</defName>
+		<label>300 Phantom Tortoises update</label>
+		<description>A tandem update with Empire Refactored to address an issue where 300 tortoises suddenly spawned on a player&apos;s map.</description>
+		<releaseDate>2026-07-11</releaseDate>
+		<patchNoteType>Patch</patchNoteType>
+		<patchNoteLines>
+		<li>Block fertilized eggs from being produced by Empire settlements or trader caravans. This should prevent the possibility of stacks of fertilized eggs getting dropped on the map and hatching into a billion lions</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
+</Defs>
