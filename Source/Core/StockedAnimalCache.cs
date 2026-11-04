@@ -31,7 +31,7 @@ public static class StockedAnimalCache
         if (!dirty && cached is not null)
             return cached;
 
-        HashSet<ThingDef> result = new HashSet<ThingDef>();
+        HashSet<ThingDef> result = [];
 
         if (FCAHSettings.BasicAnimalsEnabled)
         {

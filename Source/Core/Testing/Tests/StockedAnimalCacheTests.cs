@@ -15,7 +15,7 @@ public static class StockedAnimalCacheTests
         try
         {
             FCAHSettings.BasicAnimalsEnabled = true;
-            FCAHSettings.BasicAnimals = new List<ThingDef> { fixtureAnimal };
+            FCAHSettings.BasicAnimals = [fixtureAnimal];
             StockedAnimalCache.Invalidate();
             TestAssert.Contains(StockedAnimalCache.Get(), fixtureAnimal,
                 "an enabled basic animal should be in the stocked set");

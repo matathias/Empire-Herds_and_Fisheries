@@ -134,7 +134,7 @@ public static class AnimalRegistryDestructiveTests
             Pawn extraMale = AHDestructiveTestUtil.MakeAnimalPawn(kind, Gender.Male);
 
             int before = Find.WorldObjects.Caravans.Count(c => c.Tile == s.Tile);
-            comp.ReceivePawns(new List<Pawn> { male, female, extraMale });
+            comp.ReceivePawns([male, female, extraMale]);
 
             TestAssert.IsTrue(comp.RegisteredAnimals.Contains(species), "the arriving pair should complete");
             int after = Find.WorldObjects.Caravans.Count(c => c.Tile == s.Tile);

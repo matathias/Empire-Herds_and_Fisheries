@@ -7,8 +7,8 @@ namespace FactionColonies.AnimalHusbandry;
 /// </summary>
 public static class AnimalStockEntryTests
 {
-    private static AnimalStockEntry Gendered() => new AnimalStockEntry(AHTestHelper.MakeAnimalDef(true));
-    private static AnimalStockEntry Genderless() => new AnimalStockEntry(AHTestHelper.MakeAnimalDef(false));
+    private static AnimalStockEntry Gendered() => new(AHTestHelper.MakeAnimalDef(true));
+    private static AnimalStockEntry Genderless() => new(AHTestHelper.MakeAnimalDef(false));
 
     /*-*-*- IsComplete -*-*-*/
 

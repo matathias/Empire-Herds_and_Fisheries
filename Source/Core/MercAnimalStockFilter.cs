@@ -9,7 +9,7 @@ namespace FactionColonies.AnimalHusbandry;
 /// </summary>
 public class MercAnimalStockFilter : IAnimalPickerFilter
 {
-    public static readonly MercAnimalStockFilter Instance = new MercAnimalStockFilter();
+    public static readonly MercAnimalStockFilter Instance = new();
 
     public bool IsAnimalAllowed(PawnKindDef animal)
     {

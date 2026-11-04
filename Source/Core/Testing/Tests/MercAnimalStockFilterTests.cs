@@ -57,7 +57,7 @@ public static class MercAnimalStockFilterTests
         {
             FCAHSettings.RestrictMercAnimalsToStocked = true;
             FCAHSettings.BasicAnimalsEnabled = true;
-            FCAHSettings.BasicAnimals = new List<ThingDef> { stockedRace };
+            FCAHSettings.BasicAnimals = [stockedRace];
             StockedAnimalCache.Invalidate();
 
             TestAssert.IsTrue(Filter.IsAnimalAllowed(stockedKind),

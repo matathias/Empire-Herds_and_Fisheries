@@ -7,7 +7,7 @@ public class WorldObjectComp_AnimalRegistry : WorldObjectComp_SettlementPawnArri
 {
     // Per-species stocking progress. A species is "available for production" only once its
     // entry IsComplete (male+female, or 2+ for genderless). Partial entries persist as in-progress.
-    private List<AnimalStockEntry> animalStock = new List<AnimalStockEntry>();
+    private List<AnimalStockEntry> animalStock = [];
 
     private Vector2 scrollPosition;
 
@@ -35,7 +35,7 @@ public class WorldObjectComp_AnimalRegistry : WorldObjectComp_SettlementPawnArri
     {
         get
         {
-            List<ThingDef> result = new List<ThingDef>();
+            List<ThingDef> result = [];
             foreach (AnimalStockEntry entry in animalStock)
             {
                 if (entry.IsComplete)
@@ -53,7 +53,7 @@ public class WorldObjectComp_AnimalRegistry : WorldObjectComp_SettlementPawnArri
     /// </summary>
     public HashSet<ThingDef> GetAllowedAnimals()
     {
-        HashSet<ThingDef> result = new HashSet<ThingDef>(RegisteredAnimals);
+        HashSet<ThingDef> result = new(RegisteredAnimals);
 
         if (FCAHSettings.BasicAnimalsEnabled)
         {
@@ -175,7 +175,7 @@ public class WorldObjectComp_AnimalRegistry : WorldObjectComp_SettlementPawnArri
             }
             else
             {
-                if (overflow is null) overflow = new List<Pawn>();
+                overflow ??= [];
                 overflow.Add(pawn);
             }
         }
@@ -227,7 +227,7 @@ public class WorldObjectComp_AnimalRegistry : WorldObjectComp_SettlementPawnArri
         ThingOwner container = pawn.inventory.innerContainer;
         if (container is null || container.Count == 0) return;
 
-        List<Thing> carried = new List<Thing>();
+        List<Thing> carried = [];
         for (int i = container.Count - 1; i >= 0; i--)
         {
             Thing t = container[i];
@@ -243,7 +243,7 @@ public class WorldObjectComp_AnimalRegistry : WorldObjectComp_SettlementPawnArri
     // Geography + biome are static per tile, so the catchable-fish set is computed once and
     // cached. Not serialized: it's deterministic from the tile, so it's recomputed lazily after
     // load. The "tile not ready" case returns empty without caching, so a later call rebuilds.
-    private static readonly HashSet<ThingDef> EmptyFish = new HashSet<ThingDef>();
+    private static readonly HashSet<ThingDef> EmptyFish = [];
     private HashSet<ThingDef> allowedFishCached;
     private bool allowedFishBuilt;
 
@@ -268,7 +268,7 @@ public class WorldObjectComp_AnimalRegistry : WorldObjectComp_SettlementPawnArri
         if (t is null) return EmptyFish;
 
         BiomeFishTypes ft = t.PrimaryBiome?.fishTypes;
-        HashSet<ThingDef> set = new HashSet<ThingDef>();
+        HashSet<ThingDef> set = [];
         if (ft is not null)
         {
             bool saltwater = t.IsCoastal;                           // coast (ocean-adjacent)
@@ -343,8 +343,7 @@ public class WorldObjectComp_AnimalRegistry : WorldObjectComp_SettlementPawnArri
     {
         base.PostExposeData();
         Scribe_Collections.Look(ref animalStock, "animalStock", LookMode.Deep);
-        if (animalStock is null)
-            animalStock = new List<AnimalStockEntry>();
+        animalStock ??= [];
     }
 
     // ── ISettlementPostLoadInit ──
@@ -367,7 +366,7 @@ public class WorldObjectComp_AnimalRegistry : WorldObjectComp_SettlementPawnArri
     public List<ThingDef> GetContributableSpecies(Caravan caravan)
     {
         HashSet<ThingDef> available = GetAllowedAnimals();
-        Dictionary<ThingDef, List<Pawn>> bySpecies = new Dictionary<ThingDef, List<Pawn>>();
+        Dictionary<ThingDef, List<Pawn>> bySpecies = [];
 
         foreach (Pawn pawn in caravan.PawnsListForReading)
         {
@@ -378,13 +377,13 @@ public class WorldObjectComp_AnimalRegistry : WorldObjectComp_SettlementPawnArri
 
             if (!bySpecies.TryGetValue(race, out List<Pawn> list))
             {
-                list = new List<Pawn>();
+                list = [];
                 bySpecies[race] = list;
             }
             list.Add(pawn);
         }
 
-        List<ThingDef> result = new List<ThingDef>();
+        List<ThingDef> result = [];
         foreach (KeyValuePair<ThingDef, List<Pawn>> kvp in bySpecies)
         {
             if (CaravanCanContribute(kvp.Key, kvp.Value))
@@ -443,18 +442,18 @@ public class WorldObjectComp_AnimalRegistry : WorldObjectComp_SettlementPawnArri
 
     public bool ShouldShowOverviewTab(WorldSettlementFC settlement) => true;
 
-    private static readonly Color InProgressColor = new Color(0.9f, 0.8f, 0.45f);
+    private static readonly Color InProgressColor = new(0.9f, 0.8f, 0.45f);
 
     public void DrawOverviewTab(Rect boundingBox)
     {
         HashSet<ThingDef> available = GetAllowedAnimals();
         HashSet<ThingDef> cloned = CloningCache.GetClonedAnimals();
-        HashSet<ThingDef> complete = new HashSet<ThingDef>(RegisteredAnimals);
+        HashSet<ThingDef> complete = new(RegisteredAnimals);
 
         List<ThingDef> availableSorted = available.OrderBy(d => d.label).ToList();
 
         // In-progress species: stocked here but not yet complete, and not otherwise available.
-        List<AnimalStockEntry> partial = new List<AnimalStockEntry>();
+        List<AnimalStockEntry> partial = [];
         foreach (AnimalStockEntry entry in animalStock)
         {
             if (entry.IsComplete) continue;
@@ -464,7 +463,7 @@ public class WorldObjectComp_AnimalRegistry : WorldObjectComp_SettlementPawnArri
         partial = partial.OrderBy(e => e.species.label).ToList();
 
         float headerHeight = 30f;
-        Rect headerRect = new Rect(boundingBox.x, boundingBox.y, boundingBox.width, headerHeight);
+        Rect headerRect = new(boundingBox.x, boundingBox.y, boundingBox.width, headerHeight);
         Text.Font = GameFont.Medium;
         Text.Anchor = TextAnchor.UpperLeft;
         Widgets.Label(headerRect, "AH_StockedHeader".Translate());
@@ -476,7 +475,7 @@ public class WorldObjectComp_AnimalRegistry : WorldObjectComp_SettlementPawnArri
         if (ModsConfig.OdysseyActive && FCAHSettings.RestrictFishToWater)
         {
             float fishLineHeight = 24f;
-            Rect fishRect = new Rect(boundingBox.x, offsetY, boundingBox.width, fishLineHeight);
+            Rect fishRect = new(boundingBox.x, offsetY, boundingBox.width, fishLineHeight);
             HashSet<ThingDef> fish = GetAllowedFish();
             Color prev = GUI.color;
             string label;
@@ -498,7 +497,7 @@ public class WorldObjectComp_AnimalRegistry : WorldObjectComp_SettlementPawnArri
             offsetY += fishLineHeight;
         }
 
-        Rect listBox = new Rect(boundingBox.x, offsetY,
+        Rect listBox = new(boundingBox.x, offsetY,
             boundingBox.width, boundingBox.height - (offsetY - boundingBox.y));
 
         float rowHeight = 32f;
@@ -524,7 +523,7 @@ public class WorldObjectComp_AnimalRegistry : WorldObjectComp_SettlementPawnArri
 
         if (partial.Count > 0)
         {
-            Rect sectionRect = new Rect(0, y, viewRect.width, sectionHeaderHeight);
+            Rect sectionRect = new(0, y, viewRect.width, sectionHeaderHeight);
             Text.Anchor = TextAnchor.LowerLeft;
             Widgets.Label(sectionRect, "AH_InProgressHeader".Translate());
             Text.Anchor = TextAnchor.UpperLeft;
@@ -562,16 +561,16 @@ public class WorldObjectComp_AnimalRegistry : WorldObjectComp_SettlementPawnArri
     private static void DrawAnimalRow(float width, float y, float rowHeight, ThingDef race,
         string rightText, Color rightColor)
     {
-        Rect row = new Rect(0, y, width, rowHeight);
+        Rect row = new(0, y, width, rowHeight);
 
-        Rect iconRect = new Rect(row.x + 4, row.y + 2, 28, 28);
+        Rect iconRect = new(row.x + 4, row.y + 2, 28, 28);
         Widgets.ThingIcon(iconRect, race);
 
-        Rect labelRect = new Rect(iconRect.xMax + 8, row.y, row.width - 160, rowHeight);
+        Rect labelRect = new(iconRect.xMax + 8, row.y, row.width - 160, rowHeight);
         Text.Anchor = TextAnchor.MiddleLeft;
         Widgets.Label(labelRect, race.LabelCap);
 
-        Rect rightRect = new Rect(row.xMax - 144, row.y, 140, rowHeight);
+        Rect rightRect = new(row.xMax - 144, row.y, 140, rowHeight);
         Text.Anchor = TextAnchor.MiddleRight;
         Color prev = GUI.color;
         GUI.color = rightColor;

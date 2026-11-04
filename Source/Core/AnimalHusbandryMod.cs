@@ -10,7 +10,7 @@ public class FCAHSettings : ModSettings
     // Basic animals
     public static bool BasicAnimalsEnabled = true;
 
-    public static List<ThingDef> BasicAnimals = new List<ThingDef>();
+    public static List<ThingDef> BasicAnimals = [];
 
     // Fish (Odyssey) are gated to water-adjacent settlements, orthogonal to the breeding-pair rule.
     public static bool RestrictFishToWater = true;
@@ -26,7 +26,7 @@ public class FCAHSettings : ModSettings
 
     public static void InitializeBasicAnimals()
     {
-        BasicAnimals = new List<ThingDef>();
+        BasicAnimals = [];
         if (savedBasicAnimalDefNames is null)
         {
             BasicAnimals.Add(AnimalHusbandryDefOf.Chicken);
@@ -70,7 +70,7 @@ public class FCAHSettings : ModSettings
         // On load, InitializeBasicAnimals() resolves these at startup.
         if (Scribe.mode == LoadSaveMode.Saving && BasicAnimals is not null)
         {
-            savedBasicAnimalDefNames = new List<string>();
+            savedBasicAnimalDefNames = [];
             foreach (ThingDef d in BasicAnimals)
                 savedBasicAnimalDefNames.Add(d.defName);
         }
@@ -82,7 +82,7 @@ public class FCAHSettings : ModSettings
         // Pin "Open Patch Notes" to the bottom as a footer, separated from everything above
         // by a GapLine-style line.
         float footerButtonHeight = 32f;
-        Rect patchNotesRect = new Rect(inRect.x, inRect.yMax - footerButtonHeight, inRect.width, footerButtonHeight);
+        Rect patchNotesRect = new(inRect.x, inRect.yMax - footerButtonHeight, inRect.width, footerButtonHeight);
         if (Widgets.ButtonText(patchNotesRect, "AH_OpenPatchNotes".Translate()))
             Find.WindowStack.Add(new PatchNotesDisplayWindow("matathias.empire.animalhusbandry", "AH_PatchTitle".Translate()));
 
@@ -92,9 +92,9 @@ public class FCAHSettings : ModSettings
         Widgets.DrawLineHorizontal(inRect.x, lineY, inRect.width);
         GUI.color = prevColor;
 
-        Rect mainRect = new Rect(inRect.x, inRect.y, inRect.width, lineY - inRect.y);
+        Rect mainRect = new(inRect.x, inRect.y, inRect.width, lineY - inRect.y);
 
-        Listing_Standard ls = new Listing_Standard();
+        Listing_Standard ls = new();
         ls.Begin(mainRect);
 
         ls.Label("AH_ModVersion".Translate(AnimalHusbandryMod.GetModVersion()));
@@ -120,7 +120,7 @@ public class FCAHSettings : ModSettings
             ls.Gap(8f);
             ls.Label("AH_BasicAnimalsList".Translate());
 
-            List<ThingDef> toRemove = new List<ThingDef>();
+            List<ThingDef> toRemove = [];
             foreach (ThingDef animal in BasicAnimals)
             {
                 Rect row = ls.GetRect(24f);
@@ -176,7 +176,7 @@ public static class AnimalHusbandryStartup
 {
     // Invalidates StockedAnimalCache when a settlement is removed (the merc picker would otherwise
     // keep offering a destroyed settlement's species until reload).
-    private static readonly AnimalHusbandryLifecycleHandler _lifecycleHandler = new AnimalHusbandryLifecycleHandler();
+    private static readonly AnimalHusbandryLifecycleHandler _lifecycleHandler = new();
 
     static AnimalHusbandryStartup()
     {

@@ -22,7 +22,7 @@ public class ResourceFilterExtension_AnimalHusbandry : ResourceFilterExtension_A
         if (allowed is null || allowed.Count == 0)
         {
             // No animals — don't add races, and remove category-allowed products
-            RemoveNonAllowedProducts(filter, new HashSet<ThingDef>());
+            RemoveNonAllowedProducts(filter, []);
         }
         else
         {
@@ -89,7 +89,7 @@ public class ResourceFilterExtension_AnimalHusbandry : ResourceFilterExtension_A
                 resource.settlement.GetComponent<WorldObjectComp_AnimalRegistry>();
             HashSet<ThingDef> allowed = comp?.GetAllowedAnimals();
             if (allowed is not null && !allowed.Contains(thingDef))
-                return new List<Thing>();
+                return [];
         }
 
         return base.GenerateSpecificThings(thingDef, quantity, quality, stuffDef, resource);

@@ -13,7 +13,7 @@ public static class AnimalProductMap
     // egg). Blocked wholesale in IsProductAllowed; unfertilized (food) eggs stay as products.
     private static HashSet<ThingDef> fertilizedEggs;
     // Products already warned about (no associated animal), so the block is logged once each.
-    private static readonly HashSet<ThingDef> warnedUnmappedProducts = new HashSet<ThingDef>();
+    private static readonly HashSet<ThingDef> warnedUnmappedProducts = [];
     private static bool built = false;
 
     public static void EnsureBuilt()
@@ -33,16 +33,16 @@ public static class AnimalProductMap
 
     private static void Build()
     {
-        animalToProducts = new Dictionary<ThingDef, HashSet<ThingDef>>();
-        productToAnimals = new Dictionary<ThingDef, HashSet<ThingDef>>();
-        fertilizedEggs = new HashSet<ThingDef>();
+        animalToProducts = [];
+        productToAnimals = [];
+        fertilizedEggs = [];
 
         foreach (PawnKindDef kind in FactionCache.AllAnimalKindDefs)
         {
             ThingDef race = kind.race;
             if (race is null) continue;
             if (!animalToProducts.ContainsKey(race))
-                animalToProducts[race] = new HashSet<ThingDef>();
+                animalToProducts[race] = [];
             HashSet<ThingDef> products = animalToProducts[race];
 
             if (race.race?.meatDef is not null)
@@ -80,7 +80,7 @@ public static class AnimalProductMap
     {
         products.Add(product);
         if (!productToAnimals.ContainsKey(product))
-            productToAnimals[product] = new HashSet<ThingDef>();
+            productToAnimals[product] = [];
         productToAnimals[product].Add(race);
     }
 

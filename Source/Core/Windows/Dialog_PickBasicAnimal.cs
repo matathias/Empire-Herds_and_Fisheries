@@ -42,12 +42,12 @@ public class Dialog_PickBasicAnimal : Window
     public override void DoWindowContents(Rect inRect)
     {
         Text.Font = GameFont.Medium;
-        Rect titleRect = new Rect(inRect.x, inRect.y, inRect.width, 40f);
+        Rect titleRect = new(inRect.x, inRect.y, inRect.width, 40f);
         Widgets.Label(titleRect, "AH_PickBasicAnimalTitle".Translate());
         Text.Font = GameFont.Small;
 
         float y = titleRect.yMax + 6f;
-        Rect searchRect = new Rect(inRect.x, y, inRect.width, 28f);
+        Rect searchRect = new(inRect.x, y, inRect.width, 28f);
         searchTerm = Widgets.TextField(searchRect, searchTerm);
         if (string.IsNullOrEmpty(searchTerm))
         {
@@ -66,7 +66,7 @@ public class Dialog_PickBasicAnimal : Window
                 .Where(d => (d.label ?? d.defName).IndexOf(searchTerm, StringComparison.OrdinalIgnoreCase) >= 0)
                 .ToList();
 
-        Rect listRect = new Rect(inRect.x, y, inRect.width, inRect.height - y - 4f);
+        Rect listRect = new(inRect.x, y, inRect.width, inRect.height - y - 4f);
         float viewHeight = shown.Count * RowHeight;
         Rect viewRect = ScrollUtil.BeginScrollView(listRect, ref scrollPosition, viewHeight);
 
@@ -74,12 +74,12 @@ public class Dialog_PickBasicAnimal : Window
         float rowY = 0;
         foreach (ThingDef def in shown)
         {
-            Rect row = new Rect(0, rowY, viewRect.width, RowHeight);
+            Rect row = new(0, rowY, viewRect.width, RowHeight);
 
-            Rect iconRect = new Rect(row.x + 4, row.y + 3, 28, 28);
+            Rect iconRect = new(row.x + 4, row.y + 3, 28, 28);
             Widgets.ThingIcon(iconRect, def);
 
-            Rect labelRect = new Rect(iconRect.xMax + 8, row.y, row.width - iconRect.width - 16, RowHeight);
+            Rect labelRect = new(iconRect.xMax + 8, row.y, row.width - iconRect.width - 16, RowHeight);
             Text.Anchor = TextAnchor.MiddleLeft;
             Widgets.Label(labelRect, def.LabelCap);
             Text.Anchor = TextAnchor.UpperLeft;

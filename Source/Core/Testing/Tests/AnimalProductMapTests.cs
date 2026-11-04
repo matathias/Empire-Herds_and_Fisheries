@@ -40,11 +40,11 @@ public static class AnimalProductMapTests
         if (cow.race.meatDef is null) TestAssert.Skip("Cow has no meatDef in this load");
         ThingDef meat = cow.race.meatDef;
 
-        HashSet<ThingDef> allowsCow = new HashSet<ThingDef> { cow };
+        HashSet<ThingDef> allowsCow = [cow];
         TestAssert.IsTrue(AnimalProductMap.IsProductAllowed(meat, allowsCow),
             "meat should be allowed when its producing animal is in the allowed set");
 
-        HashSet<ThingDef> allowsNothing = new HashSet<ThingDef>();
+        HashSet<ThingDef> allowsNothing = [];
         TestAssert.IsFalse(AnimalProductMap.IsProductAllowed(meat, allowsNothing),
             "meat should be blocked when no producing animal is allowed");
     }
@@ -59,7 +59,7 @@ public static class AnimalProductMapTests
 
         // Even with the producer explicitly allowed, a fertilized egg is never a deliverable product
         // (a delivered stack would hatch into a herd).
-        HashSet<ThingDef> allowsChicken = new HashSet<ThingDef> { chicken };
+        HashSet<ThingDef> allowsChicken = [chicken];
         TestAssert.IsFalse(AnimalProductMap.IsProductAllowed(eggLayer.eggFertilizedDef, allowsChicken),
             "fertilized eggs should always be blocked as a product");
 

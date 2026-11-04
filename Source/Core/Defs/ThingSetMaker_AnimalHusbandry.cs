@@ -18,7 +18,7 @@ public class ThingSetMaker_AnimalHusbandry : ThingSetMaker
 
     protected override void Generate(ThingSetMakerParams parms, List<Thing> outThings)
     {
-        List<PawnKindDef> animalDefs = new List<PawnKindDef>();
+        List<PawnKindDef> animalDefs = [];
         foreach (PawnKindDef def in FactionCache.AllAnimalKindDefs)
         {
             if (!parms.filter.Allows(def.race)) continue;
@@ -26,7 +26,7 @@ public class ThingSetMaker_AnimalHusbandry : ThingSetMaker
             animalDefs.Add(def);
         }
 
-        List<ThingDef> productDefs = new List<ThingDef>();
+        List<ThingDef> productDefs = [];
         foreach (ThingDef def in parms.filter.AllowedThingDefs)
         {
             if (def.race is not null) continue;
@@ -71,7 +71,7 @@ public class ThingSetMaker_AnimalHusbandry : ThingSetMaker
                 do
                 {
                     if (pawn is not null) { pawn.Destroy(); pawn = null; }
-                    PawnGenerationRequest request = new PawnGenerationRequest(
+                    PawnGenerationRequest request = new(
                         kind: animalDefs.RandomElement(),
                         faction: Find.FactionManager.OfPlayer,
                         allowAddictions: false,
@@ -114,7 +114,7 @@ public class ThingSetMaker_AnimalHusbandry : ThingSetMaker
 
     protected override IEnumerable<ThingDef> AllGeneratableThingsDebugSub(ThingSetMakerParams parms)
     {
-        List<ThingDef> list = new List<ThingDef>();
+        List<ThingDef> list = [];
         foreach (PawnKindDef def in FactionCache.AllAnimalKindDefs)
         {
             if (allowedAnimals is null || allowedAnimals.Contains(def.race))

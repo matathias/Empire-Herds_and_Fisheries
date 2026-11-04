@@ -27,7 +27,7 @@ public static class CloningCache
         if (!dirty && cachedClonedAnimals is not null)
             return cachedClonedAnimals;
 
-        cachedClonedAnimals = new HashSet<ThingDef>();
+        cachedClonedAnimals = [];
         FactionFC faction = FindFC.FactionComp;
         if (faction is null) return cachedClonedAnimals;
 

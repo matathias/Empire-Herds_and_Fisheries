@@ -37,7 +37,7 @@ public static class AHTestHelper
         FCAHSettings.RestrictMercAnimalsToStocked = s.restrictMercAnimalsToStocked;
         FCAHSettings.BasicAnimals = s.basicAnimals is not null
             ? new List<ThingDef>(s.basicAnimals)
-            : new List<ThingDef>();
+            : [];
         // The basic-animal set feeds StockedAnimalCache; drop it so the restored config takes effect.
         StockedAnimalCache.Invalidate();
     }

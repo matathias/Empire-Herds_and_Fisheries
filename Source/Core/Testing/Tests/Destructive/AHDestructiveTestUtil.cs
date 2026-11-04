@@ -31,7 +31,7 @@ public static class AHDestructiveTestUtil
     /// <summary>Generates an unspawned animal pawn of the given kind and gender.</summary>
     public static Pawn MakeAnimalPawn(PawnKindDef kind, Gender gender)
     {
-        PawnGenerationRequest request = new PawnGenerationRequest(
+        PawnGenerationRequest request = new(
             kind, Faction.OfPlayer, fixedGender: gender,
             allowAddictions: false, worldPawnFactionDoesntMatter: true);
         return PawnGenerator.GeneratePawn(request);

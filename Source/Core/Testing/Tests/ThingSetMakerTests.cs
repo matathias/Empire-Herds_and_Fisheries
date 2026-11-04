@@ -18,10 +18,10 @@ public static class ThingSetMakerTests
     [EmpireTest("AH.Tithe")]
     public static void Generate_EmptyAllowedSet_ProducesNothing()
     {
-        ExposedMaker maker = new ExposedMaker(new HashSet<ThingDef>());
-        ThingSetMakerParams parms = new ThingSetMakerParams { filter = new ThingFilter() };
+        ExposedMaker maker = new([]);
+        ThingSetMakerParams parms = new() { filter = new ThingFilter() };
 
-        List<Thing> outThings = new List<Thing>();
+        List<Thing> outThings = [];
         maker.CallGenerate(parms, outThings);
 
         TestAssert.IsEmpty(outThings, "an empty allowed-animal set should generate no tithe things");

@@ -27,8 +27,8 @@ public class Dialog_RegisterAnimals : Window
     private readonly Caravan caravan;
     private readonly WorldObjectComp_AnimalRegistry comp;
     private readonly List<ThingDef> species;
-    private readonly Dictionary<ThingDef, SexSelection> selections = new Dictionary<ThingDef, SexSelection>();
-    private readonly Dictionary<ThingDef, CaravanAvail> caravanAvail = new Dictionary<ThingDef, CaravanAvail>();
+    private readonly Dictionary<ThingDef, SexSelection> selections = [];
+    private readonly Dictionary<ThingDef, CaravanAvail> caravanAvail = [];
     private Vector2 scrollPosition;
 
     private const float RowHeight = 40f;
@@ -53,7 +53,7 @@ public class Dialog_RegisterAnimals : Window
             List<Pawn> pawns = caravan.PawnsListForReading
                 .Where(p => p.RaceProps is not null && p.RaceProps.Animal && p.def == sp)
                 .ToList();
-            CaravanAvail avail = new CaravanAvail
+            CaravanAvail avail = new()
             {
                 males = pawns.Count(p => p.gender == Gender.Male),
                 females = pawns.Count(p => p.gender == Gender.Female),
@@ -70,17 +70,17 @@ public class Dialog_RegisterAnimals : Window
     public override void DoWindowContents(Rect inRect)
     {
         Text.Font = GameFont.Medium;
-        Rect titleRect = new Rect(inRect.x, inRect.y, inRect.width, 40f);
+        Rect titleRect = new(inRect.x, inRect.y, inRect.width, 40f);
         Widgets.Label(titleRect, "AH_RegisterTitle".Translate(comp.Settlement.Name));
         Text.Font = GameFont.Small;
 
         float y = titleRect.yMax + 8f;
-        Rect descRect = new Rect(inRect.x, y, inRect.width, 64f);
+        Rect descRect = new(inRect.x, y, inRect.width, 64f);
         Widgets.Label(descRect, "AH_RegisterDesc".Translate());
         y = descRect.yMax + 8f;
 
         float listHeight = inRect.height - y - 50f;
-        Rect listRect = new Rect(inRect.x, y, inRect.width, listHeight);
+        Rect listRect = new(inRect.x, y, inRect.width, listHeight);
         float viewHeight = species.Count * RowHeight;
         Rect viewRect = ScrollUtil.BeginScrollView(listRect, ref scrollPosition, viewHeight);
 
@@ -98,10 +98,10 @@ public class Dialog_RegisterAnimals : Window
         float gap = 20f;
         int selectedCount = CountSelectedIndividuals();
 
-        Rect confirmRect = new Rect(
+        Rect confirmRect = new(
             inRect.x + inRect.width / 2 - buttonWidth - gap / 2,
             buttonY, buttonWidth, 35f);
-        Rect cancelRect = new Rect(
+        Rect cancelRect = new(
             inRect.x + inRect.width / 2 + gap / 2,
             buttonY, buttonWidth, 35f);
 
@@ -124,7 +124,7 @@ public class Dialog_RegisterAnimals : Window
         if (Mouse.IsOver(row))
             Widgets.DrawHighlight(row);
 
-        Rect iconRect = new Rect(row.x + 4, row.y + 6, 28, 28);
+        Rect iconRect = new(row.x + 4, row.y + 6, 28, 28);
         Widgets.ThingIcon(iconRect, sp);
 
         AnimalStockEntry snap = comp.GetStockSnapshot(sp);
@@ -133,10 +133,10 @@ public class Dialog_RegisterAnimals : Window
 
         if (sp.race.hasGenders)
         {
-            Rect maleCell = new Rect(row.xMax - CellWidth * 2 - 8, row.y, CellWidth, row.height);
-            Rect femaleCell = new Rect(row.xMax - CellWidth - 4, row.y, CellWidth, row.height);
+            Rect maleCell = new(row.xMax - CellWidth * 2 - 8, row.y, CellWidth, row.height);
+            Rect femaleCell = new(row.xMax - CellWidth - 4, row.y, CellWidth, row.height);
 
-            Rect labelRect = new Rect(iconRect.xMax + 8, row.y, maleCell.x - iconRect.xMax - 12, row.height);
+            Rect labelRect = new(iconRect.xMax + 8, row.y, maleCell.x - iconRect.xMax - 12, row.height);
             Text.Anchor = TextAnchor.MiddleLeft;
             Widgets.Label(labelRect, sp.LabelCap);
             Text.Anchor = TextAnchor.UpperLeft;
@@ -146,9 +146,9 @@ public class Dialog_RegisterAnimals : Window
         }
         else
         {
-            Rect cell = new Rect(row.xMax - CellWidth * 2 - 8, row.y, CellWidth * 2 + 4, row.height);
+            Rect cell = new(row.xMax - CellWidth * 2 - 8, row.y, CellWidth * 2 + 4, row.height);
 
-            Rect labelRect = new Rect(iconRect.xMax + 8, row.y, cell.x - iconRect.xMax - 12, row.height);
+            Rect labelRect = new(iconRect.xMax + 8, row.y, cell.x - iconRect.xMax - 12, row.height);
             Text.Anchor = TextAnchor.MiddleLeft;
             Widgets.Label(labelRect, sp.LabelCap);
             Text.Anchor = TextAnchor.UpperLeft;
@@ -156,8 +156,8 @@ public class Dialog_RegisterAnimals : Window
             int need = 2 - snap.genderless;
             int canGive = Mathf.Min(need, avail.total);
 
-            Rect checkRect = new Rect(cell.x, cell.y + (cell.height - 24f) / 2f, 24f, 24f);
-            Rect lblRect = new Rect(checkRect.xMax + 4, cell.y, cell.xMax - checkRect.xMax - 4, cell.height);
+            Rect checkRect = new(cell.x, cell.y + (cell.height - 24f) / 2f, 24f, 24f);
+            Rect lblRect = new(checkRect.xMax + 4, cell.y, cell.xMax - checkRect.xMax - 4, cell.height);
 
             bool val = sel.genderless > 0;
             Text.Anchor = TextAnchor.MiddleLeft;
@@ -185,8 +185,8 @@ public class Dialog_RegisterAnimals : Window
         }
 
         bool inCaravan = caravanCount > 0;
-        Rect checkRect = new Rect(cell.x, cell.y + (cell.height - 24f) / 2f, 24f, 24f);
-        Rect lblRect = new Rect(checkRect.xMax + 4, cell.y, cell.xMax - checkRect.xMax - 4, cell.height);
+        Rect checkRect = new(cell.x, cell.y + (cell.height - 24f) / 2f, 24f, 24f);
+        Rect lblRect = new(checkRect.xMax + 4, cell.y, cell.xMax - checkRect.xMax - 4, cell.height);
 
         string label = (gender == Gender.Male ? "AH_ColMale" : "AH_ColFemale").Translate();
         if (inCaravan) label += " (x" + caravanCount + ")";
