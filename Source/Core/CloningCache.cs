@@ -24,7 +24,7 @@ public static class CloningCache
 
     public static HashSet<ThingDef> GetClonedAnimals()
     {
-        if (!dirty && cachedClonedAnimals is object)
+        if (!dirty && cachedClonedAnimals is not null)
             return cachedClonedAnimals;
 
         cachedClonedAnimals = new HashSet<ThingDef>();

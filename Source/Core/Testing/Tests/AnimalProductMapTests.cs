@@ -25,11 +25,11 @@ public static class AnimalProductMapTests
         HashSet<ThingDef> products = AnimalProductMap.GetProducts(cow);
         TestAssert.IsNotNull(products, "a known animal should have a product set");
 
-        if (cow.race.meatDef is object)
+        if (cow.race.meatDef is not null)
             TestAssert.Contains(products, cow.race.meatDef, "cow products should include its meat");
 
         CompProperties_Milkable milkable = cow.GetCompProperties<CompProperties_Milkable>();
-        if (milkable?.milkDef is object)
+        if (milkable?.milkDef is not null)
             TestAssert.Contains(products, milkable.milkDef, "cow products should include its milk");
     }
 
@@ -63,7 +63,7 @@ public static class AnimalProductMapTests
         TestAssert.IsFalse(AnimalProductMap.IsProductAllowed(eggLayer.eggFertilizedDef, allowsChicken),
             "fertilized eggs should always be blocked as a product");
 
-        if (eggLayer.eggUnfertilizedDef is object)
+        if (eggLayer.eggUnfertilizedDef is not null)
             TestAssert.IsTrue(AnimalProductMap.IsProductAllowed(eggLayer.eggUnfertilizedDef, allowsChicken),
                 "unfertilized (food) eggs should be allowed when the producer is allowed");
     }

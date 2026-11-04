@@ -24,7 +24,7 @@ public static class AHTestHelper
         s.restrictFishToWater = FCAHSettings.RestrictFishToWater;
         s.restrictMercAnimalsToStocked = FCAHSettings.RestrictMercAnimalsToStocked;
         // Copy the list itself: tests mutate BasicAnimals in place, so keep an independent copy.
-        s.basicAnimals = FCAHSettings.BasicAnimals is object
+        s.basicAnimals = FCAHSettings.BasicAnimals is not null
             ? new List<ThingDef>(FCAHSettings.BasicAnimals)
             : null;
         return s;
@@ -35,7 +35,7 @@ public static class AHTestHelper
         FCAHSettings.BasicAnimalsEnabled = s.basicAnimalsEnabled;
         FCAHSettings.RestrictFishToWater = s.restrictFishToWater;
         FCAHSettings.RestrictMercAnimalsToStocked = s.restrictMercAnimalsToStocked;
-        FCAHSettings.BasicAnimals = s.basicAnimals is object
+        FCAHSettings.BasicAnimals = s.basicAnimals is not null
             ? new List<ThingDef>(s.basicAnimals)
             : new List<ThingDef>();
         // The basic-animal set feeds StockedAnimalCache; drop it so the restored config takes effect.
@@ -71,7 +71,7 @@ public static class AHTestHelper
     public static PawnKindDef RequireGenderedAnimalKind()
     {
         PawnKindDef kind = FactionCache.AllAnimalKindDefs?
-            .FirstOrDefault(k => k.race?.race is object && k.race.race.Animal && k.race.race.hasGenders);
+            .FirstOrDefault(k => k.race?.race is not null && k.race.race.Animal && k.race.race.hasGenders);
         if (kind is null) TestAssert.Skip("No gendered animal kind available in the def database");
         return kind;
     }

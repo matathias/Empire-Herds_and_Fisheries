@@ -102,7 +102,7 @@ public class Dialog_PickBasicAnimal : Window
             Text.Anchor = TextAnchor.UpperLeft;
         }
 
-        if (chosen is object)
+        if (chosen is not null)
         {
             FCAHSettings.BasicAnimals.Add(chosen);
             StockedAnimalCache.Invalidate();

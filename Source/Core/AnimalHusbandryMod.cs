@@ -39,7 +39,7 @@ public class FCAHSettings : ModSettings
         foreach (string defName in savedBasicAnimalDefNames)
         {
             ThingDef def = DefDatabase<ThingDef>.GetNamedSilentFail(defName);
-            if (def is object)
+            if (def is not null)
                 BasicAnimals.Add(def);
             else
                 LogAH.Warning($"Basic animal def '{defName}' not found");
@@ -68,7 +68,7 @@ public class FCAHSettings : ModSettings
 
         // Snapshot the working ThingDef list back to defNames on save.
         // On load, InitializeBasicAnimals() resolves these at startup.
-        if (Scribe.mode == LoadSaveMode.Saving && BasicAnimals is object)
+        if (Scribe.mode == LoadSaveMode.Saving && BasicAnimals is not null)
         {
             savedBasicAnimalDefNames = new List<string>();
             foreach (ThingDef d in BasicAnimals)

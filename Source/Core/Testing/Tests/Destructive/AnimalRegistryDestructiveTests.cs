@@ -30,7 +30,7 @@ public static class AnimalRegistryDestructiveTests
             TestAssert.IsTrue(comp.RegisteredAnimals.Contains(species), "male + female should register the species");
 
             ResourceFC animals = s.GetResource(ResourceTypeDefOf.RTD_Animals);
-            if (animals is object)
+            if (animals is not null)
                 TestAssert.AreEqual(1.0, comp.GetResourceMultiplierModifier(animals),
                     message: "a registered species should enable animal production (multiplier 1)");
 
@@ -185,9 +185,9 @@ public static class AnimalRegistryDestructiveTests
         finally
         {
             // These probe pawns were generated but never stocked; discard them.
-            if (male is object && !male.Destroyed) male.Destroy();
-            if (male2 is object && !male2.Destroyed) male2.Destroy();
-            if (female is object && !female.Destroyed) female.Destroy();
+            if (male is not null && !male.Destroyed) male.Destroy();
+            if (male2 is not null && !male2.Destroyed) male2.Destroy();
+            if (female is not null && !female.Destroyed) female.Destroy();
             AHTestHelper.RestoreSettings(snap);
             DestructiveTestUtil.SafeRemoveSettlement(s);
         }

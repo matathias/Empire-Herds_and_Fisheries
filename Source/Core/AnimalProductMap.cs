@@ -45,30 +45,30 @@ public static class AnimalProductMap
                 animalToProducts[race] = new HashSet<ThingDef>();
             HashSet<ThingDef> products = animalToProducts[race];
 
-            if (race.race?.meatDef is object)
+            if (race.race?.meatDef is not null)
                 AddMapping(race, race.race.meatDef, products);
-            if (race.race?.leatherDef is object)
+            if (race.race?.leatherDef is not null)
                 AddMapping(race, race.race.leatherDef, products);
 
             CompProperties_Shearable shearable = race.GetCompProperties<CompProperties_Shearable>();
-            if (shearable?.woolDef is object)
+            if (shearable?.woolDef is not null)
                 AddMapping(race, shearable.woolDef, products);
 
             CompProperties_Milkable milkable = race.GetCompProperties<CompProperties_Milkable>();
-            if (milkable?.milkDef is object)
+            if (milkable?.milkDef is not null)
                 AddMapping(race, milkable.milkDef, products);
 
             CompProperties_EggLayer eggLayer = race.GetCompProperties<CompProperties_EggLayer>();
-            if (eggLayer?.eggUnfertilizedDef is object)
+            if (eggLayer?.eggUnfertilizedDef is not null)
                 AddMapping(race, eggLayer.eggUnfertilizedDef, products);
             // Fertilized eggs are NOT mapped as a product — they hatch into live animals, so a
             // delivered stack becomes a herd. Tracked separately and blocked in IsProductAllowed.
-            if (eggLayer?.eggFertilizedDef is object)
+            if (eggLayer?.eggFertilizedDef is not null)
                 fertilizedEggs.Add(eggLayer.eggFertilizedDef);
 
             // Insect jelly has no producing comp (vanilla Hives spawn it), so associate it with any
             // insect race so insect-stocked settlements produce it and non-insect settlements don't.
-            if (race.race is object && race.race.Insect)
+            if (race.race is not null && race.race.Insect)
                 AddMapping(race, ThingDefOf.InsectJelly, products);
         }
 
@@ -131,7 +131,7 @@ public static class AnimalProductMap
     private static bool IsWaterGatedProduct(ThingDef def)
     {
         return ModsConfig.OdysseyActive
-            && ThingCategoryDefOf.Fish is object
+            && ThingCategoryDefOf.Fish is not null
             && def.IsWithinCategory(ThingCategoryDefOf.Fish);
     }
 

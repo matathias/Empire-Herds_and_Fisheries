@@ -51,7 +51,7 @@ public class Dialog_RegisterAnimals : Window
             selections[sp] = default(SexSelection);
 
             List<Pawn> pawns = caravan.PawnsListForReading
-                .Where(p => p.RaceProps is object && p.RaceProps.Animal && p.def == sp)
+                .Where(p => p.RaceProps is not null && p.RaceProps.Animal && p.def == sp)
                 .ToList();
             CaravanAvail avail = new CaravanAvail
             {
@@ -223,7 +223,7 @@ public class Dialog_RegisterAnimals : Window
             SexSelection sel = kvp.Value;
 
             List<Pawn> pool = caravan.PawnsListForReading
-                .Where(p => p.RaceProps is object && p.RaceProps.Animal && p.def == sp)
+                .Where(p => p.RaceProps is not null && p.RaceProps.Animal && p.def == sp)
                 .ToList();
 
             if (sp.race.hasGenders)
@@ -231,12 +231,12 @@ public class Dialog_RegisterAnimals : Window
                 if (sel.male)
                 {
                     Pawn m = pool.FirstOrDefault(p => p.gender == Gender.Male);
-                    if (m is object) ConsumeAndRecord(m);
+                    if (m is not null) ConsumeAndRecord(m);
                 }
                 if (sel.female)
                 {
                     Pawn f = pool.FirstOrDefault(p => p.gender == Gender.Female);
-                    if (f is object) ConsumeAndRecord(f);
+                    if (f is not null) ConsumeAndRecord(f);
                 }
             }
             else

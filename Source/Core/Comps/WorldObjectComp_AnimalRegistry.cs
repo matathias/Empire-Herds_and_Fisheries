@@ -95,7 +95,7 @@ public class WorldObjectComp_AnimalRegistry : WorldObjectComp_SettlementPawnArri
             || !AnimalProductMap.IsKnownAnimal(species)) return;   // exclude dryads/blacklisted races
 
         AnimalStockEntry entry = FindEntry(species);
-        bool existed = entry is object;
+        bool existed = entry is not null;
         if (!existed) entry = new AnimalStockEntry(species);
 
         bool wasComplete = entry.IsComplete;
@@ -166,7 +166,7 @@ public class WorldObjectComp_AnimalRegistry : WorldObjectComp_SettlementPawnArri
             /* Re-check live: an earlier pawn in this same pod may have just filled the sex
                (e.g. two males of a brand-new species arriving together), so the registry no
                longer needs this one even though AcceptsPawn passed against the pre-arrival state. */
-            if (pawn?.def?.race is object && pawn.def.race.Animal
+            if (pawn?.def?.race is not null && pawn.def.race.Animal
                 && !GetAllowedAnimals().Contains(pawn.def)
                 && StillNeeds(pawn.def, pawn.gender))
             {
@@ -182,7 +182,7 @@ public class WorldObjectComp_AnimalRegistry : WorldObjectComp_SettlementPawnArri
 
         // Anything we couldn't stock becomes a caravan at the settlement tile (mirrors
         // SettlementPawnArrivalFallback), so a player never loses an animal to over-stocking.
-        if (overflow is object && overflow.Count > 0)
+        if (overflow is not null && overflow.Count > 0)
             CaravanMaker.MakeCaravan(overflow, Faction.OfPlayer, Settlement.Tile, true);
     }
 
@@ -211,7 +211,7 @@ public class WorldObjectComp_AnimalRegistry : WorldObjectComp_SettlementPawnArri
         }
 
         RouteCarriedInventory(pawn);   // don't destroy cargo along with the pawn
-        if (Find.WorldPawns is object && Find.WorldPawns.Contains(pawn))
+        if (Find.WorldPawns is not null && Find.WorldPawns.Contains(pawn))
             Find.WorldPawns.RemovePawn(pawn);
         if (!pawn.Destroyed) pawn.Destroy();
         AddIndividual(species, gender);
@@ -262,19 +262,19 @@ public class WorldObjectComp_AnimalRegistry : WorldObjectComp_SettlementPawnArri
             return EmptyFish;
         }
 
-        PlanetTile pt = Settlement is object ? Settlement.Tile : PlanetTile.Invalid;
+        PlanetTile pt = Settlement is not null ? Settlement.Tile : PlanetTile.Invalid;
         if (!pt.Valid) return EmptyFish;   // world/settlement not ready yet; recompute later
         Tile t = pt.Tile;
         if (t is null) return EmptyFish;
 
         BiomeFishTypes ft = t.PrimaryBiome?.fishTypes;
         HashSet<ThingDef> set = new HashSet<ThingDef>();
-        if (ft is object)
+        if (ft is not null)
         {
             bool saltwater = t.IsCoastal;                           // coast (ocean-adjacent)
             SurfaceTile st = t as SurfaceTile;
             bool freshwater = Find.World.LakeDirectionAt(pt) != Rot4.Invalid  // lakeshore
-                || (st is object && st.Rivers is object && st.Rivers.Count > 0); // river
+                || (st is not null && st.Rivers is not null && st.Rivers.Count > 0); // river
             if (freshwater)
             {
                 AddFish(set, ft.freshwater_Common);
@@ -296,7 +296,7 @@ public class WorldObjectComp_AnimalRegistry : WorldObjectComp_SettlementPawnArri
     {
         if (chances is null) return;
         foreach (FishChance fc in chances)
-            if (fc.fishDef is object) set.Add(fc.fishDef);
+            if (fc.fishDef is not null) set.Add(fc.fishDef);
     }
 
     // Fish (Odyssey) are an axis orthogonal to breeding pairs. With RestrictFishToWater ON they need
@@ -580,7 +580,7 @@ public class WorldObjectComp_AnimalRegistry : WorldObjectComp_SettlementPawnArri
         Text.Anchor = TextAnchor.UpperLeft;
 
         HashSet<ThingDef> products = AnimalProductMap.GetProducts(race);
-        if (products is object && products.Count > 0)
+        if (products is not null && products.Count > 0)
         {
             string tip = string.Join(", ", products.Select(p => p.LabelCap.ToString()));
             TooltipHandler.TipRegion(row, "AH_ProductsTooltip".Translate(race.LabelCap, tip));

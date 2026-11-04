@@ -22,15 +22,15 @@ public class ThingSetMaker_AnimalHusbandry : ThingSetMaker
         foreach (PawnKindDef def in FactionCache.AllAnimalKindDefs)
         {
             if (!parms.filter.Allows(def.race)) continue;
-            if (allowedAnimals is object && !allowedAnimals.Contains(def.race)) continue;
+            if (allowedAnimals is not null && !allowedAnimals.Contains(def.race)) continue;
             animalDefs.Add(def);
         }
 
         List<ThingDef> productDefs = new List<ThingDef>();
         foreach (ThingDef def in parms.filter.AllowedThingDefs)
         {
-            if (def.race is object) continue;
-            if (allowedAnimals is object && !AnimalProductMap.IsProductAllowed(def, allowedAnimals))
+            if (def.race is not null) continue;
+            if (allowedAnimals is not null && !AnimalProductMap.IsProductAllowed(def, allowedAnimals))
                 continue;
             productDefs.Add(def);
         }
@@ -70,7 +70,7 @@ public class ThingSetMaker_AnimalHusbandry : ThingSetMaker
                 int attempts = 0;
                 do
                 {
-                    if (pawn is object) { pawn.Destroy(); pawn = null; }
+                    if (pawn is not null) { pawn.Destroy(); pawn = null; }
                     PawnGenerationRequest request = new PawnGenerationRequest(
                         kind: animalDefs.RandomElement(),
                         faction: Find.FactionManager.OfPlayer,
@@ -120,7 +120,7 @@ public class ThingSetMaker_AnimalHusbandry : ThingSetMaker
             if (allowedAnimals is null || allowedAnimals.Contains(def.race))
                 list.Add(def.race);
         }
-        if (parms.filter is object)
+        if (parms.filter is not null)
         {
             foreach (ThingDef def in parms.filter.AllowedThingDefs)
             {

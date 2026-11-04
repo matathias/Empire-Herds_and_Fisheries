@@ -28,7 +28,7 @@ public static class StockedAnimalCache
 
     public static HashSet<ThingDef> Get()
     {
-        if (!dirty && cached is object)
+        if (!dirty && cached is not null)
             return cached;
 
         HashSet<ThingDef> result = new HashSet<ThingDef>();
@@ -36,13 +36,13 @@ public static class StockedAnimalCache
         if (FCAHSettings.BasicAnimalsEnabled)
         {
             foreach (ThingDef def in FCAHSettings.BasicAnimals)
-                if (def is object) result.Add(def);
+                if (def is not null) result.Add(def);
         }
 
         result.UnionWith(CloningCache.GetClonedAnimals());
 
         FactionFC faction = FindFC.FactionComp;
-        if (faction is object)
+        if (faction is not null)
         {
             foreach (WorldSettlementFC settlement in faction.settlements)
             {

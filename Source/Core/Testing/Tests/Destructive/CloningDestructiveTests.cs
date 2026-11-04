@@ -40,7 +40,7 @@ public static class CloningDestructiveTests
         }
         finally
         {
-            if (slot >= 0 && s is object) SafeDeconstruct(s, slot);
+            if (slot >= 0 && s is not null) SafeDeconstruct(s, slot);
             AHTestHelper.RestoreSettings(snap);
             DestructiveTestUtil.SafeRemoveSettlement(s);
         }
@@ -86,7 +86,7 @@ public static class CloningDestructiveTests
         }
         finally
         {
-            if (slot >= 0 && s is object) SafeDeconstruct(s, slot);
+            if (slot >= 0 && s is not null) SafeDeconstruct(s, slot);
             AHTestHelper.RestoreSettings(snap);
             DestructiveTestUtil.SafeRemoveSettlement(s);
         }

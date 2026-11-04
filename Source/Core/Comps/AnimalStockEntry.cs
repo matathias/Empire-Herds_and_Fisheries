@@ -25,7 +25,7 @@ public class AnimalStockEntry : IExposable
 
     private bool HasGenders
     {
-        get { return species is object && species.race is object && species.race.hasGenders; }
+        get { return species is not null && species.race is not null && species.race.hasGenders; }
     }
 
     /// <summary>True once this species can produce: a male and a female (gendered), or 2+ (genderless).</summary>

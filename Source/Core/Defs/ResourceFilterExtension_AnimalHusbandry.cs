@@ -41,8 +41,8 @@ public class ResourceFilterExtension_AnimalHusbandry : ResourceFilterExtension_A
         // products") are restricted to the species this settlement's biome offers for the water
         // type(s) its tile touches, regardless of breeding pairs. Disallow the rest; an empty
         // allowed set (landlocked / no-fish biome) removes them all. Inert without Odyssey.
-        if (comp is object && ModsConfig.OdysseyActive && FCAHSettings.RestrictFishToWater
-            && ThingCategoryDefOf.Fish is object)
+        if (comp is not null && ModsConfig.OdysseyActive && FCAHSettings.RestrictFishToWater
+            && ThingCategoryDefOf.Fish is not null)
         {
             HashSet<ThingDef> allowedFish = comp.GetAllowedFish();
             foreach (ThingDef fish in ThingCategoryDefOf.Fish.DescendantThingDefs)
@@ -58,7 +58,7 @@ public class ResourceFilterExtension_AnimalHusbandry : ResourceFilterExtension_A
         List<ThingDef> snapshot = filter.AllowedThingDefs.ToList();
         foreach (ThingDef def in snapshot)
         {
-            if (def.race is object) continue;
+            if (def.race is not null) continue;
             if (!AnimalProductMap.IsProductAllowed(def, allowed))
                 filter.SetAllow(def, false);
         }
@@ -69,7 +69,7 @@ public class ResourceFilterExtension_AnimalHusbandry : ResourceFilterExtension_A
         tlevel = TechLevel.Undefined;
 
         HashSet<ThingDef> allowed = null;
-        if (resource is object && resource.settlement is object)
+        if (resource is not null && resource.settlement is not null)
         {
             WorldObjectComp_AnimalRegistry comp =
                 resource.settlement.GetComponent<WorldObjectComp_AnimalRegistry>();
@@ -83,12 +83,12 @@ public class ResourceFilterExtension_AnimalHusbandry : ResourceFilterExtension_A
         QualityCategory quality = QualityCategory.Normal, ThingDef stuffDef = null,
         ResourceFC resource = null)
     {
-        if (thingDef.race is object && resource is object && resource.settlement is object)
+        if (thingDef.race is not null && resource is not null && resource.settlement is not null)
         {
             WorldObjectComp_AnimalRegistry comp =
                 resource.settlement.GetComponent<WorldObjectComp_AnimalRegistry>();
             HashSet<ThingDef> allowed = comp?.GetAllowedAnimals();
-            if (allowed is object && !allowed.Contains(thingDef))
+            if (allowed is not null && !allowed.Contains(thingDef))
                 return new List<Thing>();
         }
 
