@@ -1,7 +1,3 @@
-using FactionColonies;
-using RimWorld;
-using Verse;
-
 namespace FactionColonies.AnimalHusbandry;
 
 [DefOf]

@@ -1,7 +1,4 @@
-using System.Collections.Generic;
-using FactionColonies;
 using UnityEngine;
-using Verse;
 
 namespace FactionColonies.AnimalHusbandry;
 

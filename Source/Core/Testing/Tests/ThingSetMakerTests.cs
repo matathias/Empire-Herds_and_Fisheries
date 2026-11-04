@@ -1,8 +1,3 @@
-using System.Collections.Generic;
-using FactionColonies;
-using RimWorld;
-using Verse;
-
 namespace FactionColonies.AnimalHusbandry;
 
 /// <summary>

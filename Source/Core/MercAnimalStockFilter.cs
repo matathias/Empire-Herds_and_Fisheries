@@ -1,6 +1,3 @@
-using FactionColonies;
-using Verse;
-
 namespace FactionColonies.AnimalHusbandry;
 
 /// <summary>

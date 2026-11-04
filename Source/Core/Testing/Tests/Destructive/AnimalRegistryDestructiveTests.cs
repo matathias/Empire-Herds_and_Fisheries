@@ -1,10 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using FactionColonies;
-using RimWorld;
-using RimWorld.Planet;
-using Verse;
-
 namespace FactionColonies.AnimalHusbandry;
 
 /* DESTRUCTIVE: drives WorldObjectComp_AnimalRegistry against a live transient settlement. Each test

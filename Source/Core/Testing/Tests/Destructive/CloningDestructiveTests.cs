@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using FactionColonies;
-using Verse;
-
 namespace FactionColonies.AnimalHusbandry;
 
 /* DESTRUCTIVE: exercises the Cloning Lab sharing path against a live transient settlement. Builds a

@@ -1,10 +1,4 @@
-using System.Collections.Generic;
-using System.Linq;
-using FactionColonies;
-using RimWorld;
-using RimWorld.Planet;
 using UnityEngine;
-using Verse;
 
 namespace FactionColonies.AnimalHusbandry;
 

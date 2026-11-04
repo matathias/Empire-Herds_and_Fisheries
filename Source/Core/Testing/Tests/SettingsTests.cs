@@ -1,5 +1,3 @@
-using FactionColonies;
-
 namespace FactionColonies.AnimalHusbandry;
 
 /// <summary>

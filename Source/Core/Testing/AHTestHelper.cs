@@ -1,8 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using FactionColonies;
-using Verse;
-
 namespace FactionColonies.AnimalHusbandry;
 
 /// <summary>

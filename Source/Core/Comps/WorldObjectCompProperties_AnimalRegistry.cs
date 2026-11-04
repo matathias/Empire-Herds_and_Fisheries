@@ -1,5 +1,3 @@
-using RimWorld;
-
 namespace FactionColonies.AnimalHusbandry;
 
 public class WorldObjectCompProperties_AnimalRegistry : WorldObjectCompProperties
