@@ -14,10 +14,4 @@ public class AnimalHusbandryLifecycleHandler : ISettlementListener
         StockedAnimalCache.Invalidate();
         CloningCache.Invalidate();
     }
-
-    public void OnSettlementCreated(WorldSettlementFC settlement) { }
-    public void OnSettlementUpgraded(WorldSettlementFC settlement, int oldLevel, int newLevel) { }
-    public void OnSettlementTypeChanged(WorldSettlementFC settlement, WorldSettlementDef oldDef, WorldSettlementDef newDef) { }
-    public void OnBuildingConstructed(WorldSettlementFC settlement, BuildingFCDef building, int slot) { }
-    public void OnBuildingDeconstructed(WorldSettlementFC settlement, BuildingFCDef building, int slot) { }
 }

@@ -311,22 +311,12 @@ public class WorldObjectComp_AnimalRegistry : WorldObjectComp_SettlementPawnArri
 
     // ── IResourceProductionModifier ──
 
-    public double GetResourceAdditiveModifier(ResourceFC resource)
-    {
-        return 0;
-    }
-
     public double GetResourceMultiplierModifier(ResourceFC resource)
     {
         if (resource.def != ResourceTypeDefOf.RTD_Animals) return 1;
         if (HasAnyAnimals()) return 1;
         if (CanProduceFish()) return 1;   // fish enable production with no breeding pairs
         return 0;
-    }
-
-    public string GetResourceAdditiveDesc(ResourceFC resource)
-    {
-        return null;
     }
 
     public string GetResourceMultiplierDesc(ResourceFC resource)
@@ -587,9 +577,5 @@ public class WorldObjectComp_AnimalRegistry : WorldObjectComp_SettlementPawnArri
 
         if (Mouse.IsOver(row))
             Widgets.DrawHighlight(row);
-    }
-
-    public void PostCloseWindow()
-    {
     }
 }
