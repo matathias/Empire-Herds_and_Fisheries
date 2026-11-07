@@ -3,8 +3,8 @@ namespace FactionColonies.AnimalHusbandry;
 /// <summary>
 /// Coverage for <see cref="AnimalProductMap"/>'s race/product mapping and the
 /// <see cref="AnimalProductMap.IsProductAllowed"/> gate. Needs the def database (the map is built
-/// from <see cref="FactionCache.AllAnimalKindDefs"/>) but no faction; every test skips if the real
-/// defs it needs are absent from the current load.
+/// from <see cref="FactionCache.AllAnimalKindDefs"/>) but no faction. The cow, chicken and steel
+/// defs it uses ship with Core, so their absence fails the test.
 /// </summary>
 public static class AnimalProductMapTests
 {
@@ -37,8 +37,7 @@ public static class AnimalProductMapTests
     public static void IsProductAllowed_ProducerInAllowedSet_Allowed()
     {
         ThingDef cow = AHTestHelper.RequireAnimalRace("Cow");
-        if (cow.race.meatDef is null) TestAssert.Skip("Cow has no meatDef in this load");
-        ThingDef meat = cow.race.meatDef;
+        ThingDef meat = TestAssert.NotNull(cow.race.meatDef, "Cow has no meatDef in this load");
 
         HashSet<ThingDef> allowsCow = [cow];
         TestAssert.IsTrue(AnimalProductMap.IsProductAllowed(meat, allowsCow),
@@ -54,8 +53,7 @@ public static class AnimalProductMapTests
     {
         ThingDef chicken = AHTestHelper.RequireAnimalRace("Chicken");
         CompProperties_EggLayer eggLayer = chicken.GetCompProperties<CompProperties_EggLayer>();
-        if (eggLayer?.eggFertilizedDef is null)
-            TestAssert.Skip("Chicken has no fertilized-egg def in this load");
+        TestAssert.NotNull(eggLayer?.eggFertilizedDef, "Chicken has no fertilized-egg def in this load");
 
         // Even with the producer explicitly allowed, a fertilized egg is never a deliverable product
         // (a delivered stack would hatch into a herd).

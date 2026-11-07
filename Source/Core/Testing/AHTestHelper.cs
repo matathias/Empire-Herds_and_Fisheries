@@ -4,7 +4,7 @@ namespace FactionColonies.AnimalHusbandry;
 /// Shared helpers for the Herds &amp; Fisheries tests: a snapshot/restore for the mutable
 /// <see cref="FCAHSettings"/> statics (so tests can pin a known configuration and still leave
 /// settings as they found them), plus small fixture builders for the pure tests and real-def
-/// lookups (skip-guarded) for the tests that need the game's def database.
+/// lookups for the tests that need the game's def database (Core defs, so a missing one fails).
 /// </summary>
 public static class AHTestHelper
 {
@@ -64,32 +64,28 @@ public static class AHTestHelper
     }
 
     /// <summary>
-    /// A real animal kind from the game's animal list whose race has genders, or skips the test.
-    /// Every kind in <see cref="FactionCache.AllAnimalKindDefs"/> is a known animal, so its race
-    /// passes <see cref="AnimalProductMap.IsKnownAnimal"/>.
+    /// A real gendered animal kind whose race is NOT in <paramref name="excluded"/>, so a test can
+    /// stock it from a clean slate. Every kind in <see cref="FactionCache.AllAnimalKindDefs"/> is a
+    /// known animal, so its race passes <see cref="AnimalProductMap.IsKnownAnimal"/>. Fails the test
+    /// if every gendered animal species is excluded.
     /// </summary>
-    public static PawnKindDef RequireGenderedAnimalKind()
+    public static PawnKindDef RequireGenderedAnimalKind(ICollection<ThingDef> excluded = null)
     {
         PawnKindDef kind = FactionCache.AllAnimalKindDefs?
-            .FirstOrDefault(k => k.race?.race is not null && k.race.race.Animal && k.race.race.hasGenders);
-        if (kind is null) TestAssert.Skip("No gendered animal kind available in the def database");
-        return kind;
+            .FirstOrDefault(k => k.race?.race is not null && k.race.race.Animal && k.race.race.hasGenders
+                && (excluded is null || !excluded.Contains(k.race)));
+        return TestAssert.NotNull(kind, "No gendered animal kind available outside the excluded species");
     }
 
-    /// <summary>A real animal race resolved by defName, or skips the test if absent.</summary>
+    /// <summary>A Core animal race resolved by defName; fails the test if absent.</summary>
     public static ThingDef RequireAnimalRace(string defName)
     {
         ThingDef def = DefDatabase<ThingDef>.GetNamedSilentFail(defName);
-        if (def?.race is null || !def.race.Animal)
-            TestAssert.Skip($"Animal race '{defName}' not present in this load");
+        TestAssert.IsTrue(def?.race is not null && def.race.Animal, $"Animal race '{defName}' not present in this load");
         return def;
     }
 
-    /// <summary>A ThingDef resolved by defName, or skips the test if absent.</summary>
-    public static ThingDef RequireThingDef(string defName)
-    {
-        ThingDef def = DefDatabase<ThingDef>.GetNamedSilentFail(defName);
-        if (def is null) TestAssert.Skip($"ThingDef '{defName}' not present in this load");
-        return def;
-    }
+    /// <summary>A Core ThingDef resolved by defName; fails the test if absent.</summary>
+    public static ThingDef RequireThingDef(string defName) =>
+        TestAssert.NotNull(DefDatabase<ThingDef>.GetNamedSilentFail(defName), $"ThingDef '{defName}' not present in this load");
 }

@@ -1,8 +1,8 @@
 namespace FactionColonies.AnimalHusbandry;
 
 /// <summary>
-/// Coverage for <see cref="FCAHSettings.ResetToDefaults"/>. Skips unless the basic-animal DefOfs
-/// have resolved (they resolve at startup, so this holds inside a running game). Snapshot/restore
+/// Coverage for <see cref="FCAHSettings.ResetToDefaults"/>. The basic-animal DefOfs resolve at
+/// startup, so an unresolved one is a failure. Snapshot/restore
 /// pins the mutated statics because ResetToDefaults rewrites them and invalidates caches.
 /// </summary>
 public static class SettingsTests
@@ -10,8 +10,8 @@ public static class SettingsTests
     [EmpireTest("AH.Settings")]
     public static void ResetToDefaults_RestoresBoolsAndDefaultAnimals()
     {
-        if (AnimalHusbandryDefOf.Cow is null || AnimalHusbandryDefOf.Chicken is null)
-            TestAssert.Skip("Basic-animal DefOfs not resolved in this load");
+        TestAssert.NotNull(AnimalHusbandryDefOf.Cow, "AnimalHusbandryDefOf.Cow did not resolve");
+        TestAssert.NotNull(AnimalHusbandryDefOf.Chicken, "AnimalHusbandryDefOf.Chicken did not resolve");
 
         AHTestHelper.SettingsSnapshot snap = AHTestHelper.SnapshotSettings();
         try

@@ -10,22 +10,18 @@ public static class CloningDestructiveTests
     public static void CloningLab_SharesRegisteredSpeciesEmpireWide()
     {
         FactionFC f = DestructiveTestUtil.RequireFaction();
-        PawnKindDef kind = AHTestHelper.RequireGenderedAnimalKind();
-        ThingDef species = kind.race;
-
         WorldSettlementFC s = AHDestructiveTestUtil.CreateSettlementWithRegistry(out var comp);
-        if (s is null) TestAssert.Skip("Could not create a settlement carrying the animal registry");
 
         int slot = -1;
         AHTestHelper.SettingsSnapshot snap = AHTestHelper.SnapshotSettings();
         try
         {
             FCAHSettings.BasicAnimalsEnabled = false;
-            if (comp.GetAllowedAnimals().Contains(species))
-                TestAssert.Skip("Test species is already available here (cloned elsewhere?)");
+            // Species shared empire-wide by a Cloning Lab are already available here; stock one that is not.
+            PawnKindDef kind = AHTestHelper.RequireGenderedAnimalKind(comp.GetAllowedAnimals());
+            ThingDef species = kind.race;
 
             slot = AHDestructiveTestUtil.AttachCloningLab(s);
-            if (slot < 0) TestAssert.Skip("No empty building slot for a Cloning Lab");
             TestAssert.IsTrue(s.BuildingsComp.HasBuilding(AnimalHusbandryDefOf.CloningLab),
                 "the Cloning Lab should be present after construction");
 
@@ -50,22 +46,18 @@ public static class CloningDestructiveTests
     public static void CloningLab_Deconstruct_StopsSharingSpecies()
     {
         FactionFC f = DestructiveTestUtil.RequireFaction();
-        PawnKindDef kind = AHTestHelper.RequireGenderedAnimalKind();
-        ThingDef species = kind.race;
-
         WorldSettlementFC s = AHDestructiveTestUtil.CreateSettlementWithRegistry(out var comp);
-        if (s is null) TestAssert.Skip("Could not create a settlement carrying the animal registry");
 
         int slot = -1;
         AHTestHelper.SettingsSnapshot snap = AHTestHelper.SnapshotSettings();
         try
         {
             FCAHSettings.BasicAnimalsEnabled = false;
-            if (comp.GetAllowedAnimals().Contains(species))
-                TestAssert.Skip("Test species is already available here (cloned elsewhere?)");
+            // Species shared empire-wide by a Cloning Lab are already available here; stock one that is not.
+            PawnKindDef kind = AHTestHelper.RequireGenderedAnimalKind(comp.GetAllowedAnimals());
+            ThingDef species = kind.race;
 
             slot = AHDestructiveTestUtil.AttachCloningLab(s);
-            if (slot < 0) TestAssert.Skip("No empty building slot for a Cloning Lab");
 
             comp.AddIndividual(species, Gender.Male);
             comp.AddIndividual(species, Gender.Female);
