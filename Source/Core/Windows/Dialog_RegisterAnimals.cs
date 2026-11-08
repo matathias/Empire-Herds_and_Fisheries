@@ -50,9 +50,7 @@ public class Dialog_RegisterAnimals : Window
         {
             selections[sp] = default(SexSelection);
 
-            List<Pawn> pawns = caravan.PawnsListForReading
-                .Where(p => p.RaceProps is not null && p.RaceProps.Animal && p.def == sp)
-                .ToList();
+            List<Pawn> pawns = CaravanAnimalsOf(sp);
             CaravanAvail avail = new()
             {
                 males = pawns.Count(p => p.gender == Gender.Male),
@@ -65,6 +63,14 @@ public class Dialog_RegisterAnimals : Window
         doCloseButton = false;
         absorbInputAroundWindow = true;
         closeOnClickedOutside = true;
+    }
+
+    // The caravan's animals of species sp, in caravan order.
+    private List<Pawn> CaravanAnimalsOf(ThingDef sp)
+    {
+        return caravan.PawnsListForReading
+            .Where(p => p.RaceProps is not null && p.RaceProps.Animal && p.def == sp)
+            .ToList();
     }
 
     // The game keeps running while the dialog is open, so the caravan can leave (or be destroyed)
@@ -234,9 +240,7 @@ public class Dialog_RegisterAnimals : Window
             ThingDef sp = kvp.Key;
             SexSelection sel = kvp.Value;
 
-            List<Pawn> pool = caravan.PawnsListForReading
-                .Where(p => p.RaceProps is not null && p.RaceProps.Animal && p.def == sp)
-                .ToList();
+            List<Pawn> pool = CaravanAnimalsOf(sp);
 
             if (sp.race.hasGenders)
             {

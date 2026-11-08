@@ -187,8 +187,8 @@ public static class AnimalHusbandryStartup
         EmpireCacheUtil.RegisterCacheInvalidator("AnimalHusbandry", () =>
         {
             AnimalProductMap.Clear();
-            CloningCache.Clear();
-            StockedAnimalCache.Clear();
+            CloningCache.Invalidate();
+            StockedAnimalCache.Invalidate();
         });
         AnimalProductMap.EnsureBuilt();
         FCAHSettings.InitializeBasicAnimals();

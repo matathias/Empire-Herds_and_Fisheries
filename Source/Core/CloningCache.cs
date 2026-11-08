@@ -16,12 +16,6 @@ public static class CloningCache
         cachedClonedAnimals = null;
     }
 
-    public static void Clear()
-    {
-        cachedClonedAnimals = null;
-        dirty = true;
-    }
-
     public static HashSet<ThingDef> GetClonedAnimals()
     {
         if (!dirty && cachedClonedAnimals is not null)

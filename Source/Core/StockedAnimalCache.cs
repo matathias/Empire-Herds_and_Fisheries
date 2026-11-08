@@ -20,12 +20,6 @@ public static class StockedAnimalCache
         cached = null;
     }
 
-    public static void Clear()
-    {
-        cached = null;
-        dirty = true;
-    }
-
     public static HashSet<ThingDef> Get()
     {
         if (!dirty && cached is not null)

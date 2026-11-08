@@ -161,14 +161,21 @@ public class WorldObjectComp_AnimalRegistry : WorldObjectComp_SettlementPawnArri
     /* The single-pawn form of the caravan contribution rule (GetContributableSpecies /
        CaravanCanContribute): accept an animal whose species isn't already available here
        (producing / basic / cloned) and whose sex the settlement still needs. Anything rejected
-       (non-animal, already-available species, sex already stocked) falls through to the base
+       (non-animal, excluded species, already-available species, sex already stocked) falls through to the base
        arrival fallback, which forms a caravan, so nothing is lost. */
-    public override bool AcceptsPawn(Pawn pawn)
+    public override bool AcceptsPawn(Pawn pawn) => pawn is not null && CanStock(pawn.def, pawn.gender);
+
+    /// <summary>
+    /// The stocking rule shared by pod arrival and the caravan register dialog: a known animal species
+    /// (dryads and blacklisted races excluded) that is not already available here (producing / basic /
+    /// cloned) and whose sex the settlement still needs.
+    /// </summary>
+    public bool CanStock(ThingDef species, Gender gender)
     {
-        if (pawn?.def?.race is null || !pawn.def.race.Animal) return false;
-        if (!AnimalProductMap.IsKnownAnimal(pawn.def)) return false;   // exclude dryads/blacklisted races
-        if (GetAllowedAnimals().Contains(pawn.def)) return false;
-        return StillNeeds(pawn.def, pawn.gender);
+        if (species?.race is null || !species.race.Animal) return false;
+        if (!AnimalProductMap.IsKnownAnimal(species)) return false;
+        if (GetAllowedAnimals().Contains(species)) return false;
+        return StillNeeds(species, gender);
     }
 
     public override string ArrivalMenuLabel => "AH_StockAnimalsAt".Translate(Settlement.Name);
@@ -189,9 +196,7 @@ public class WorldObjectComp_AnimalRegistry : WorldObjectComp_SettlementPawnArri
             /* Re-check live: an earlier pawn in this same pod may have just filled the sex
                (e.g. two males of a brand-new species arriving together), so the registry no
                longer needs this one even though AcceptsPawn passed against the pre-arrival state. */
-            if (pawn?.def?.race is not null && pawn.def.race.Animal
-                && !GetAllowedAnimals().Contains(pawn.def)
-                && StillNeeds(pawn.def, pawn.gender))
+            if (AcceptsPawn(pawn))
             {
                 StockIndividual(pawn);
                 lastStockedCount++;
@@ -222,12 +227,8 @@ public class WorldObjectComp_AnimalRegistry : WorldObjectComp_SettlementPawnArri
 
         // Never destroy an animal AddIndividual would reject (non-animal / excluded species /
         // species already available / this sex already stocked) - that would be a pawn lost for
-        // zero credit. Both current callers pre-check, so this only guards future callers; mirror
-        // the AcceptsPawn acceptance contract exactly.
-        if (species?.race is null || !species.race.Animal
-            || !AnimalProductMap.IsKnownAnimal(species)
-            || GetAllowedAnimals().Contains(species)
-            || !StillNeeds(species, gender))
+        // zero credit. Both current callers pre-check, so this only guards future callers.
+        if (!CanStock(species, gender))
         {
             LogAH.Warning($"StockIndividual skipped {species?.defName} at {Settlement?.Name}: not needed");
             return;
