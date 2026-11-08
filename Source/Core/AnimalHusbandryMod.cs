@@ -55,7 +55,7 @@ public class FCAHSettings : ModSettings
         savedBasicAnimalDefNames = null;   // "never saved" => InitializeBasicAnimals re-adds the defaults
         InitializeBasicAnimals();
         StockedAnimalCache.Invalidate();   // basic-animal list changed
-        FindFC.FactionComp?.InvalidateAllSettlementStatCaches();
+        WorldObjectComp_AnimalRegistry.InvalidateAllSettlementAnimalCaches();
     }
 
     public override void ExposeData()
@@ -112,7 +112,7 @@ public class FCAHSettings : ModSettings
         if (prevBasic != BasicAnimalsEnabled)
         {
             StockedAnimalCache.Invalidate();
-            FindFC.FactionComp?.InvalidateAllSettlementStatCaches();
+            WorldObjectComp_AnimalRegistry.InvalidateAllSettlementAnimalCaches();
         }
 
         if (BasicAnimalsEnabled)
@@ -132,7 +132,7 @@ public class FCAHSettings : ModSettings
             {
                 BasicAnimals.Remove(animal);
                 StockedAnimalCache.Invalidate();
-                FindFC.FactionComp?.InvalidateAllSettlementStatCaches();
+                WorldObjectComp_AnimalRegistry.InvalidateAllSettlementAnimalCaches();
             }
 
             ls.Gap(4f);
@@ -149,7 +149,7 @@ public class FCAHSettings : ModSettings
             "AH_RestrictFishToWaterDesc".Translate());
 
         if (prevFish != RestrictFishToWater)
-            FindFC.FactionComp?.InvalidateAllSettlementStatCaches();
+            WorldObjectComp_AnimalRegistry.InvalidateAllSettlementAnimalCaches();
 
         ls.GapLine();
 

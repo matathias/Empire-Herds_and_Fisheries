@@ -10,13 +10,13 @@ public class SettlementBuildingComp_CloningLab : SettlementBuildingComp
     {
         base.OnConstruct(buildingSlot);
         CloningCache.Invalidate();
-        FindFC.FactionComp?.InvalidateAllSettlementStatCaches();
+        WorldObjectComp_AnimalRegistry.InvalidateAllSettlementAnimalCaches();
     }
 
     public override void OnDeconstruct(int buildingSlot)
     {
         CloningCache.Invalidate();
-        FindFC.FactionComp?.InvalidateAllSettlementStatCaches();
+        WorldObjectComp_AnimalRegistry.InvalidateAllSettlementAnimalCaches();
         base.OnDeconstruct(buildingSlot);
     }
 }

@@ -106,7 +106,7 @@ public class Dialog_PickBasicAnimal : Window
         {
             FCAHSettings.BasicAnimals.Add(chosen);
             StockedAnimalCache.Invalidate();
-            FindFC.FactionComp?.InvalidateAllSettlementStatCaches();
+            WorldObjectComp_AnimalRegistry.InvalidateAllSettlementAnimalCaches();
             Close();
         }
     }

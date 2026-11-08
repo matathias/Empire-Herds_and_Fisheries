@@ -106,9 +106,32 @@ public class WorldObjectComp_AnimalRegistry : WorldObjectComp_SettlementPawnArri
         {
             CloningCache.Invalidate();
             StockedAnimalCache.Invalidate();
-            Settlement?.InvalidateResourceCaches();
-            RefreshAnimalTitheFilter(species);
+            // With a Cloning Lab here, the species becomes available at every settlement, so their
+            // production multipliers and tithe pickers change too.
+            if (Settlement?.BuildingsComp?.HasBuilding(AnimalHusbandryDefOf.CloningLab) == true)
+            {
+                InvalidateAllSettlementAnimalCaches();
+            }
+            else
+            {
+                Settlement?.InvalidateResourceCaches();
+                RefreshAnimalTitheFilter(species);
+            }
         }
+    }
+
+    /// <summary>
+    /// Invalidates every settlement's stat/production caches and dirties each one's animal
+    /// tithe-picker list. Use when the set of animals available at more than one settlement changes
+    /// (Cloning Lab sharing, Basic Animals settings).
+    /// </summary>
+    public static void InvalidateAllSettlementAnimalCaches()
+    {
+        FactionFC faction = FindFC.FactionComp;
+        if (faction is null) return;
+        faction.InvalidateAllSettlementStatCaches();
+        foreach (WorldSettlementFC settlement in faction.settlements)
+            settlement?.GetResource(ResourceTypeDefOf.RTD_Animals)?.SetDirtyRandomTitheCache();
     }
 
     // A newly completed breeding pair must become tithe-able. InvalidateResourceCaches only dirties
