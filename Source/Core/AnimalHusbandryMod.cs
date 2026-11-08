@@ -181,17 +181,14 @@ public static class AnimalHusbandryStartup
     static AnimalHusbandryStartup()
     {
         // Gate the base mod's unit-designer animal/mount pickers to stocked animals.
-        EmpireRegistry.Register(MercAnimalStockFilter.Instance);
-        EmpireRegistry.Register(_lifecycleHandler);
+        EmpireRegistry.RegisterPersistent(MercAnimalStockFilter.Instance);
+        EmpireRegistry.RegisterPersistent(_lifecycleHandler);
 
         EmpireCacheUtil.RegisterCacheInvalidator("AnimalHusbandry", () =>
         {
             AnimalProductMap.Clear();
             CloningCache.Clear();
             StockedAnimalCache.Clear();
-            // InvalidateAll runs EmpireRegistry.ClearAll() before these callbacks, so re-register.
-            EmpireRegistry.Register(MercAnimalStockFilter.Instance);
-            EmpireRegistry.Register(_lifecycleHandler);
         });
         AnimalProductMap.EnsureBuilt();
         FCAHSettings.InitializeBasicAnimals();
@@ -207,23 +204,10 @@ public class AnimalHusbandryMod : Mod
     {
         settings = GetSettings<FCAHSettings>();
         
-        string modVersion = content?.ModMetaData?.ModVersion;
-        if (modVersion.NullOrEmpty())
-        {
-            LogAH.MessageForce("Did not load a mod version");
-        }
-        else
-        {
-            LogAH.MessageForce($"v{modVersion}");
-        }
+        ModVersionUtil.LogLoaded(content, LogAH.MessageForce);
     }
 
-    public static string GetModVersion()
-    {
-        var mod = LoadedModManager.GetMod<AnimalHusbandryMod>();
-        string version = mod?.Content?.ModMetaData?.ModVersion;
-        return version.NullOrEmpty() ? "Unknown" : version;
-    }
+    public static string GetModVersion() => ModVersionUtil.Get<AnimalHusbandryMod>();
 
     public override string SettingsCategory() => "AH_Title".Translate();
 
