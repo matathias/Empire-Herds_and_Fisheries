@@ -67,8 +67,20 @@ public class Dialog_RegisterAnimals : Window
         closeOnClickedOutside = true;
     }
 
+    // The game keeps running while the dialog is open, so the caravan can leave (or be destroyed)
+    // before Confirm; stocking from it then would pull animals off a caravan that is elsewhere.
+    private bool CaravanStillHere =>
+        caravan is { Destroyed: false } && comp.Settlement is not null && caravan.Tile == comp.Settlement.Tile;
+
     public override void DoWindowContents(Rect inRect)
     {
+        if (!CaravanStillHere)
+        {
+            Messages.Message("AH_RegisterCaravanLeft".Translate(), MessageTypeDefOf.RejectInput, false);
+            Close();
+            return;
+        }
+
         Text.Font = GameFont.Medium;
         Rect titleRect = new(inRect.x, inRect.y, inRect.width, 40f);
         Widgets.Label(titleRect, "AH_RegisterTitle".Translate(comp.Settlement.Name));
