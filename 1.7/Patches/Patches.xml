@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+
+    <!-- Add AnimalRegistry comp to surface settlements -->
+    <Operation Class="PatchOperationAdd">
+        <xpath>/Defs/FactionColonies.WorldSettlementDef[defName="WorldSettlementDef_Surface"]/comps</xpath>
+        <value>
+            <li Class="FactionColonies.AnimalHusbandry.WorldObjectCompProperties_AnimalRegistry" />
+        </value>
+    </Operation>
+	
+    <Operation Class="PatchOperationConditional" MayRequire="Ludeon.RimWorld.Odyssey">
+        <xpath>/Defs/FactionColonies.WorldSettlementDef[defName="WorldSettlementDef_Orbital"]/comps</xpath>
+        <match Class="PatchOperationAdd">
+            <xpath>/Defs/FactionColonies.WorldSettlementDef[defName="WorldSettlementDef_Orbital"]/comps</xpath>
+            <value>
+                <li Class="FactionColonies.AnimalHusbandry.WorldObjectCompProperties_AnimalRegistry" />
+            </value>
+        </match>
+    </Operation>
+
+    <!-- Re-class the base animal filter extension to our filtered subclass.
+         AttributeSet (not Replace) so the base's child config - notably
+         <blacklistedTradeTags> (AnimalDryad/AnimalMonster/AnimalGenetic), which the
+         base mod reads via RTD_Animals.GetModExtension<ResourceFilterExtension_Animals>()
+         to build FactionCache.AllAnimalKindDefs - is preserved and inherited, rather than
+         dropped. Our subclass shares those fields, so they deserialize unchanged. -->
+    <Operation Class="PatchOperationAttributeSet">
+        <xpath>/Defs/FactionColonies.ResourceTypeDef[defName="RTD_Animals"]/modExtensions/li[@Class="FactionColonies.ResourceFilterExtension_Animals"]</xpath>
+        <attribute>Class</attribute>
+        <value>FactionColonies.AnimalHusbandry.ResourceFilterExtension_AnimalHusbandry</value>
+    </Operation>
+
+    <!-- Attach the Cloning Lab building comp. Its OnConstruct/OnDeconstruct invalidate the empire-wide
+         CloningCache (replacing AnimalHusbandryLifecycleHandler). The base CloningLab def has no
+         modExtensions, so add the whole element; the base BuildingFCExtension type carries compClass. -->
+    <Operation Class="PatchOperationAdd">
+        <xpath>/Defs/FactionColonies.BuildingFCDef[defName="CloningLab"]</xpath>
+        <value>
+            <modExtensions>
+                <li Class="FactionColonies.BuildingFCExtension">
+                    <compClass>FactionColonies.AnimalHusbandry.SettlementBuildingComp_CloningLab</compClass>
+                </li>
+            </modExtensions>
+        </value>
+    </Operation>
+
+</Patch>

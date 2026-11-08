@@ -13,6 +13,7 @@
     <AH_RegisterDesc>Send individual animals to stock this settlement. A species needs a male and a female (or two of a genderless species) before it can produce.</AH_RegisterDesc>
     <AH_Confirm>Confirm</AH_Confirm>
     <AH_Cancel>Cancel</AH_Cancel>
+    <AH_RegisterCaravanLeft>The caravan is no longer at the settlement, so no animals were stocked.</AH_RegisterCaravanLeft>
     <AH_ColMale>Male</AH_ColMale>
     <AH_ColFemale>Female</AH_ColFemale>
     <AH_HaveMale>Have male</AH_HaveMale>
